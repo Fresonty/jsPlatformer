@@ -11,6 +11,7 @@ function PlayState() {
     }
     this.run = function () {
         this.update()
+        clearEventQueue();
         renderer.render(container);
     }
 }
@@ -20,6 +21,7 @@ function PlayState() {
 
         this.state = null,
         this.init = function () {
+            this.rect1 = new Rectangle();
             this.player = new Player("playerimage")
             this.state = this.play;
             this.mainloop();

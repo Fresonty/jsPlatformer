@@ -5,7 +5,7 @@ function Player(texturename) {
     container.addChild(this);
 
     this.state = new StandingState(this);
-    
+
     this.vel = {
         x: 0,
         y: 0,
@@ -17,13 +17,33 @@ function Player(texturename) {
         this.vel.y = physics.applyGravity(this.vel.y);
 
         this.position.x += this.vel.x;
+
         this.position.y += this.vel.y;
+
+        var collisions = this.getCollisions()
+        if (collisions.length > 0) {
+            this.vel.y = 0;
+            this.position.y = collisions[0].y - this.height;
+            this.state = new StandingState(this);
+        }
+
     }
     this.handleEvents = function () {
         newstate = this.state.handleEvents();
         if (newstate != null) {
             this.state = newstate;
         }
+    }
+    this.getCollisions = function () {
+        var collisions = [];
+        for (sprite in container.children) {
+            if (container.children[sprite] !== this) {
+                if (hitTestRectangle(this, container.children[sprite])) {
+                    collisions.push(container.children[sprite]);
+                }
+            }
+        }
+        return collisions;
     }
 }
 Player.prototype = Object.create(PIXI.Sprite.prototype)
@@ -40,8 +60,11 @@ function PlayerState(caller) {
         }
     }
     this.update = function () {
+        null;
+        /*
         this.caller.position.x += caller.vel.x;
         this.caller.position.y += caller.vel.y;
+        */
     }
 }
 
@@ -50,7 +73,7 @@ function StandingState(caller) {
     this.handleEvent = function (event) {
         switch (event.keyIdentifier) {
             case "Up":
-                this.caller.vel.y = -20;
+                this.caller.vel.y = -10;
                 return new JumpingState(this.caller);
         }
     }
