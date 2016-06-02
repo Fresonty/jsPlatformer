@@ -11,7 +11,6 @@ var init = function () {
         .load(setup);
 
     function setup() {
-        ListenEvents();
         game = new Game();
         game.init();
     }

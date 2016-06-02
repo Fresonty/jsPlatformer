@@ -4,7 +4,7 @@ function Player(texturename) {
     PIXI.Sprite.call(this, this.texture)
     container.addChild(this);
 
-    this.state = new StandingState;
+    this.state = new StandingState(this);
     
     this.vel = {
         x: 0,
@@ -12,8 +12,8 @@ function Player(texturename) {
     }
 
     this.update = function () {
-        this.handleEvents();
-        // this.update();
+        this.handleEvents(this);
+        this.state.update(this);
         this.vel.y = physics.applyGravity(this.vel.y);
 
         this.position.x += this.vel.x;
@@ -26,35 +26,39 @@ function Player(texturename) {
         }
     }
 }
-
 Player.prototype = Object.create(PIXI.Sprite.prototype)
 
-function PlayerState() {
+
+function PlayerState(caller) {
+    this.caller = caller
     this.handleEvents = function () {
         for (event in eventQueue) {
-            this.handleEvent(eventQueue[event]);
+            var newstate = this.handleEvent(eventQueue[event]);
+        }
+        if (newstate != null) {
+            return newstate;
         }
     }
     this.update = function () {
-        null;
+        this.caller.position.x += caller.vel.x;
+        this.caller.position.y += caller.vel.y;
     }
 }
 
-function StandingState() {
-    PlayerState.call(this);
+function StandingState(caller) {
+    PlayerState.call(this, caller);
     this.handleEvent = function (event) {
-        switch (event) {
-            case PRESS_UP:
-                return new JumpingState();
+        switch (event.keyIdentifier) {
+            case "Up":
+                this.caller.vel.y = -20;
+                return new JumpingState(this.caller);
         }
-    }
-    this.update = function () {
     }
 }
 StandingState.prototype = Object.create(PlayerState.prototype)
 
-function JumpingState() {
-    PlayerState.call(this);
+function JumpingState(caller) {
+    PlayerState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event) {
             case PRESS_DOWN:
@@ -62,3 +66,4 @@ function JumpingState() {
         }
     }
 }
+JumpingState.prototype = Object.create(PlayerState.prototype)

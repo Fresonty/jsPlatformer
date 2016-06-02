@@ -3,10 +3,7 @@ function addEvent(event) {
     eventQueue.push(event)
 }
 
-ListenEvents = function() {
-    UP = keyboard(38);
-    this.UP.press = function() {
-        addEvent(event);
-    }
+var UP = keyboard(38);
+UP.press = function () {
+    addEvent(event);
 }
-

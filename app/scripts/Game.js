@@ -5,7 +5,9 @@ function GameState() {
 function PlayState() {
     GameState.call(this)
     this.update = function () {
-        // this.handleEvents()
+        for (sprite in container.children) {
+            container.children[sprite].update();
+        }
     }
     this.run = function () {
         this.update()

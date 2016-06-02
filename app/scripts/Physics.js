@@ -1,7 +1,7 @@
 function Physics() {
     this.applyGravity = function(yvel) {
-        if (yvel <= 10) {
-            return yvel += 1;
+        if (yvel <= 5) {
+            return yvel += 0.1;
         }
     }
 }
