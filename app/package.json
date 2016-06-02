@@ -1,0 +1,6 @@
+{
+  "name": "jsplatformer",
+  "version": "0.0.1",
+  "description": "A Platformer in JavaScript",
+  "main": "main.js"
+}
