@@ -14,17 +14,34 @@ function Player(texturename) {
     this.update = function () {
         this.handleEvents(this);
         this.state.update(this);
+
         this.vel.y = physics.applyGravity(this.vel.y);
 
         this.position.x += this.vel.x;
+        var collisions = physics.getCollisions(this, container)
+        if (collisions.length > 0) {
+            if (this.vel.x > 0) {
+                this.vel.x = 0;
+                this.position.x = collisions[0].x - this.width;
+            }
+            else if (this.vel.x < 0) {
+                this.vel.x = 0;
+                this.position.x = collisions[0].x + this.width;
+            }
+        }
 
         this.position.y += this.vel.y;
-
-        var collisions = this.getCollisions()
+        var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
-            this.vel.y = 0;
-            this.position.y = collisions[0].y - this.height;
-            this.state = new StandingState(this);
+            if (this.vel.y > 0) {
+                this.vel.y = 0;
+                this.position.y = collisions[0].y - this.height;
+                this.state = new StandingState(this);
+            }
+            else if (this.vel.y < 0) {
+                this.vel.y = 0;
+                this.position.y = collisions[0].y + this.height;
+            }
         }
 
     }
@@ -33,17 +50,6 @@ function Player(texturename) {
         if (newstate != null) {
             this.state = newstate;
         }
-    }
-    this.getCollisions = function () {
-        var collisions = [];
-        for (sprite in container.children) {
-            if (container.children[sprite] !== this) {
-                if (hitTestRectangle(this, container.children[sprite])) {
-                    collisions.push(container.children[sprite]);
-                }
-            }
-        }
-        return collisions;
     }
 }
 Player.prototype = Object.create(PIXI.Sprite.prototype)
@@ -61,20 +67,44 @@ function PlayerState(caller) {
     }
     this.update = function () {
         null;
-        /*
-        this.caller.position.x += caller.vel.x;
-        this.caller.position.y += caller.vel.y;
-        */
     }
 }
 
 function StandingState(caller) {
     PlayerState.call(this, caller);
     this.handleEvent = function (event) {
-        switch (event.keyIdentifier) {
-            case "Up":
-                this.caller.vel.y = -10;
-                return new JumpingState(this.caller);
+        switch (event.keyCode) {
+            case PLAYER_MOVE_UP:
+                if (event.type === "keydown") {
+                    this.caller.vel.y = -32;
+                    return new JumpingState(this.caller);
+                }
+                else if (event.type === "keyup") {
+                    null;
+                }
+                break;
+
+            case PLAYER_MOVE_DOWN:
+                null;
+                break;
+
+            case PLAYER_MOVE_LEFT:
+                if (event.type === "keydown") {
+                    this.caller.vel.x = - 4;
+                }
+                else if (event.type === "keyup") {
+                    this.caller.vel.x = 0;
+                }
+                break;
+
+            case PLAYER_MOVE_RIGHT:
+                if (event.type === "keydown") {
+                    this.caller.vel.x = 4;
+                }
+                else if (event.type === "keyup") {
+                    this.caller.vel.x = 0;
+                }
+                break;
         }
     }
 }
@@ -84,8 +114,8 @@ function JumpingState(caller) {
     PlayerState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event) {
-            case PRESS_DOWN:
-                console.log("DOWN PRESS")
+            case PLAYER_MOVE_DOWN:
+                null;
         }
     }
 }
