@@ -1,37 +1,41 @@
 
 function Game() {
-    this.play = new PlayState(),
+    this.state = new PlayState()
 
-        this.state = null,
-        this.init = function () {
-            this.rect1 = new Rectangle();
-            this.player = new Player("playerimage")
-            this.state = this.play;
-            this.mainloop();
-        }.bind(this),
+    this.init = function () {
+        this.state.init()
+        this.mainloop();
+    }
 
-        this.mainloop = function () {
-            this.state.run();
-            requestAnimationFrame(this.mainloop)
-        }.bind(this)
+    this.mainloop = function () {
+        this.state.run();
+        requestAnimationFrame(this.mainloop)
+    }.bind(this)
 }
 
 
 function GameState() {
-    this.enter = function () { };
-    this.run = function () { console.log("run") };
+    this.init = function () { };
+    this.run = function () { };
+    this.update = function () { };
 }
 
 function PlayState() {
     GameState.call(this);
-    this.update = function () {
-        for (sprite in container.children) {
-            container.children[sprite].update();
-        }
+    this.init = function () {
+        player = new Player("playerimage");
+        rect1 = new Rectangle(0, 512, 600, 10)
     }
     this.run = function () {
         this.update();
         clearEventQueue();
         renderer.render(container);
     }
+
+    this.update = function () {
+        for (sprite in container.children) {
+            container.children[sprite].update();
+        }
+    }
 }
+PlayState.prototype = Object.create(GameState.prototype)
