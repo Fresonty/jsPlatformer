@@ -1,11 +1,11 @@
 function Player(texturename) {
     this.texturename = texturename;
     this.texture = PIXI.loader.resources[this.texturename].texture;
-    PIXI.Sprite.call(this, this.texture)
+    PIXI.Sprite.call(this, this.texture);
     container.addChild(this);
-    this.scale.set(4, 4)
+    this.scale.set(4, 4);
 
-    this.state = new JumpingState(this);
+    this.state = new PlayerJumpingState(this);
 
     this.vel = {
         x: 0,
@@ -31,6 +31,7 @@ function Player(texturename) {
             }
         }
     }
+    
     this.move_y = function () {
         this.position.y += this.vel.y;
         var collisions = physics.getCollisions(this, container)
@@ -38,7 +39,7 @@ function Player(texturename) {
             if (this.vel.y > 0) {
                 this.vel.y = 0;
                 this.position.y = collisions[0].y - this.height;
-                this.state = new StandingState(this);
+                this.state = new PlayerStandingState(this);
             }
             else if (this.vel.y < 0) {
                 this.vel.y = 0;
@@ -46,7 +47,7 @@ function Player(texturename) {
             }
         }
         else {
-            this.state = new JumpingState(this);
+            this.state = new PlayerJumpingState(this);
         }
     }
 }
@@ -57,12 +58,10 @@ function PlayerState(caller) {
     this.caller = caller
     this.handleEvents = function () {
         for (event in eventQueue) {
-            var newstate = this.handleEvent(eventQueue[event]);
-        }
-        if (newstate != null) {
-            return newstate;
+            this.handleEvent(eventQueue[event]);
         }
     }
+
     this.update = function () {
         this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
         this.caller.move_x();
@@ -70,14 +69,14 @@ function PlayerState(caller) {
     }
 }
 
-function StandingState(caller) {
+function PlayerStandingState(caller) {
     PlayerState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
                 if (event.type === "keydown") {
                     this.caller.vel.y = -12;
-                    this.caller.state =  new JumpingState(this.caller);
+                    this.caller.state =  new PlayerJumpingState(this.caller);
                 }
                 else if (event.type === "keyup") {
                     null;
@@ -108,9 +107,9 @@ function StandingState(caller) {
         }
     }
 }
-StandingState.prototype = Object.create(PlayerState.prototype)
+PlayerStandingState.prototype = Object.create(PlayerState.prototype);
 
-function JumpingState(caller) {
+function PlayerJumpingState(caller) {
     PlayerState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event.keyCode) {
@@ -147,4 +146,4 @@ function JumpingState(caller) {
         }
     }
 }
-JumpingState.prototype = Object.create(PlayerState.prototype)
+PlayerJumpingState.prototype = Object.create(PlayerState.prototype);
