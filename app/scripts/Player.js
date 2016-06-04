@@ -3,8 +3,9 @@ function Player(texturename) {
     this.texture = PIXI.loader.resources[this.texturename].texture;
     PIXI.Sprite.call(this, this.texture)
     container.addChild(this);
+    this.scale.set(4,4)
 
-    this.state = new StandingState(this);
+    this.state = new JumpingState(this);
 
     this.vel = {
         x: 0,
@@ -44,7 +45,7 @@ function Player(texturename) {
             }
         }
         else {
-            this.state = new JumpingState(this)
+            this.state = new JumpingState(this);
         }
 
     }
@@ -79,7 +80,7 @@ function StandingState(caller) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
                 if (event.type === "keydown") {
-                    this.caller.vel.y = -16;
+                    this.caller.vel.y = -12;
                     return new JumpingState(this.caller);
                 }
                 else if (event.type === "keyup") {
@@ -95,7 +96,7 @@ function StandingState(caller) {
                 if (event.type === "keydown") {
                     this.caller.vel.x = - 4;
                 }
-                else if (event.type === "keyup") {
+                else if (event.type === "keyup" && this.caller.vel.x < 0) {
                     this.caller.vel.x = 0;
                 }
                 break;
@@ -104,7 +105,7 @@ function StandingState(caller) {
                 if (event.type === "keydown") {
                     this.caller.vel.x = 4;
                 }
-                else if (event.type === "keyup") {
+                else if (event.type === "keyup" && this.caller.vel.x > 0) {
                     this.caller.vel.x = 0;
                 }
                 break;
@@ -116,9 +117,37 @@ StandingState.prototype = Object.create(PlayerState.prototype)
 function JumpingState(caller) {
     PlayerState.call(this, caller);
     this.handleEvent = function (event) {
-        switch (event) {
+        switch (event.keyCode) {
+            case PLAYER_MOVE_UP:
+                if (event.type === "keydown") {
+                    null;
+                }
+                else if (event.type === "keyup") {
+                    null;
+                }
+                break;
+
             case PLAYER_MOVE_DOWN:
                 null;
+                break;
+
+            case PLAYER_MOVE_LEFT:
+                if (event.type === "keydown") {
+                    this.caller.vel.x = - 4;
+                }
+                else if (event.type === "keyup" && this.caller.vel.x < 0) {
+                    this.caller.vel.x = 0;
+                }
+                break;
+
+            case PLAYER_MOVE_RIGHT:
+                if (event.type === "keydown") {
+                    this.caller.vel.x = 4;
+                }
+                else if (event.type === "keyup" && this.caller.vel.x > 0) {
+                    this.caller.vel.x = 0;
+                }
+                break;
         }
     }
 }
