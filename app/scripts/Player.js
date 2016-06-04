@@ -3,7 +3,7 @@ function Player(texturename) {
     this.texture = PIXI.loader.resources[this.texturename].texture;
     PIXI.Sprite.call(this, this.texture)
     container.addChild(this);
-    this.scale.set(4,4)
+    this.scale.set(4, 4)
 
     this.state = new JumpingState(this);
 
@@ -13,11 +13,11 @@ function Player(texturename) {
     }
 
     this.update = function () {
-        this.handleEvents(this);
+        this.state.handleEvents(this);
         this.state.update(this);
-
-        this.vel.y = physics.applyGravity(this.vel.y);
-
+    }
+    
+    this.move_x = function () {
         this.position.x += this.vel.x;
         var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
@@ -27,10 +27,11 @@ function Player(texturename) {
             }
             else if (this.vel.x < 0) {
                 this.vel.x = 0;
-                this.position.x = collisions[0].x + this.width;
+                this.position.x = collisions[0].x + collisions[0].width;
             }
         }
-
+    }
+    this.move_y = function () {
         this.position.y += this.vel.y;
         var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
@@ -41,18 +42,11 @@ function Player(texturename) {
             }
             else if (this.vel.y < 0) {
                 this.vel.y = 0;
-                this.position.y = collisions[0].y + this.height;
+                this.position.y = collisions[0].y + collisions[0].height;
             }
         }
         else {
             this.state = new JumpingState(this);
-        }
-
-    }
-    this.handleEvents = function () {
-        newstate = this.state.handleEvents();
-        if (newstate != null) {
-            this.state = newstate;
         }
     }
 }
@@ -70,7 +64,9 @@ function PlayerState(caller) {
         }
     }
     this.update = function () {
-        null;
+        this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
+        this.caller.move_x();
+        this.caller.move_y();
     }
 }
 
@@ -81,7 +77,7 @@ function StandingState(caller) {
             case PLAYER_MOVE_UP:
                 if (event.type === "keydown") {
                     this.caller.vel.y = -12;
-                    return new JumpingState(this.caller);
+                    this.caller.state =  new JumpingState(this.caller);
                 }
                 else if (event.type === "keyup") {
                     null;

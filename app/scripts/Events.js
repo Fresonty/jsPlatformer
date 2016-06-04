@@ -2,6 +2,9 @@ var eventQueue = [];
 function addEvent(event) {
     eventQueue.push(event)
 }
+function removeEvent(eventIndex) {
+    eventQueue.splice(evendIndex, 1)
+}
 function clearEventQueue() {
     eventQueue = [];
 }

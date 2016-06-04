@@ -24,7 +24,8 @@ function PlayState() {
     GameState.call(this);
     this.init = function () {
         player = new Player("playerimage");
-        rect1 = new Rectangle(0, 512, 600, 10)
+        rect1 = new Rectangle(0, 512, 600, 10);
+        rect2 = new Rectangle(300, 400, 600, 500);
     }
     this.run = function () {
         this.update();
