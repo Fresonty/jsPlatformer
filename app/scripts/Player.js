@@ -43,6 +43,9 @@ function Player(texturename) {
                 this.position.y = collisions[0].y + this.height;
             }
         }
+        else {
+            this.state = new JumpingState(this)
+        }
 
     }
     this.handleEvents = function () {
@@ -76,7 +79,7 @@ function StandingState(caller) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
                 if (event.type === "keydown") {
-                    this.caller.vel.y = -32;
+                    this.caller.vel.y = -16;
                     return new JumpingState(this.caller);
                 }
                 else if (event.type === "keyup") {
