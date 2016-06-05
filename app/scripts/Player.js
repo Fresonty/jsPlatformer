@@ -1,60 +1,11 @@
 function Player(texturename) {
-    this.texturename = texturename;
-    this.texture = PIXI.loader.resources[this.texturename].texture;
-    PIXI.Sprite.call(this, this.texture);
-    container.addChild(this);
-    this.scale.set(4, 4);
-
+    Mob.call(this, texturename);
     this.state = new PlayerJumpingState(this);
-
-    this.vel = {
-        x: 0,
-        y: 0,
-    }
-
-    this.update = function () {
-        this.state.handleEvents(this);
-        this.state.update(this);
-    }
-    
-    this.move_x = function () {
-        this.position.x += this.vel.x;
-        var collisions = physics.getCollisions(this, container)
-        if (collisions.length > 0) {
-            if (this.vel.x > 0) {
-                this.vel.x = 0;
-                this.position.x = collisions[0].x - this.width;
-            }
-            else if (this.vel.x < 0) {
-                this.vel.x = 0;
-                this.position.x = collisions[0].x + collisions[0].width;
-            }
-        }
-    }
-    
-    this.move_y = function () {
-        this.position.y += this.vel.y;
-        var collisions = physics.getCollisions(this, container)
-        if (collisions.length > 0) {
-            if (this.vel.y > 0) {
-                this.vel.y = 0;
-                this.position.y = collisions[0].y - this.height;
-                this.state = new PlayerStandingState(this);
-            }
-            else if (this.vel.y < 0) {
-                this.vel.y = 0;
-                this.position.y = collisions[0].y + collisions[0].height;
-            }
-        }
-        else {
-            this.state = new PlayerJumpingState(this);
-        }
-    }
 }
-Player.prototype = Object.create(PIXI.Sprite.prototype)
+Player.prototype = Object.create(Mob.prototype)
 
 
-function PlayerState(caller) {
+function PlayerBaseState(caller) {
     this.caller = caller
     this.handleEvents = function () {
         for (event in eventQueue) {
@@ -64,13 +15,13 @@ function PlayerState(caller) {
 
     this.update = function () {
         this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
-        this.caller.move_x();
-        this.caller.move_y();
+        physics.move_x(this.caller);
+        physics.move_y(this.caller);
     }
 }
 
 function PlayerStandingState(caller) {
-    PlayerState.call(this, caller);
+    PlayerBaseState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
@@ -107,10 +58,10 @@ function PlayerStandingState(caller) {
         }
     }
 }
-PlayerStandingState.prototype = Object.create(PlayerState.prototype);
+PlayerStandingState.prototype = Object.create(PlayerBaseState.prototype);
 
 function PlayerJumpingState(caller) {
-    PlayerState.call(this, caller);
+    PlayerBaseState.call(this, caller);
     this.handleEvent = function (event) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
@@ -146,4 +97,4 @@ function PlayerJumpingState(caller) {
         }
     }
 }
-PlayerJumpingState.prototype = Object.create(PlayerState.prototype);
+PlayerJumpingState.prototype = Object.create(PlayerBaseState.prototype);
