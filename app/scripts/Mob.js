@@ -5,7 +5,7 @@ function Mob(texturename) {
     container.addChild(this);
     this.scale.set(4, 4);
     
-    this.state = new MobJumpingState(this);
+    this.state = null;
     
     this.vel = {
         x: 0,
@@ -15,8 +15,6 @@ function Mob(texturename) {
         this.state.handleEvents(this);
         this.state.update(this);
     }
-    
-    
 }
 Mob.prototype = Object.create(PIXI.Sprite.prototype)
 

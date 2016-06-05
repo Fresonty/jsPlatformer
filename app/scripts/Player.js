@@ -1,6 +1,40 @@
 function Player(texturename) {
     Mob.call(this, texturename);
     this.state = new PlayerJumpingState(this);
+    
+    this.move_x = function () {
+        this.position.x += this.vel.x;
+        var collisions = physics.getCollisions(this, container)
+        if (collisions.length > 0) {
+            if (this.vel.x > 0) {
+                // this.vel.x = 0;
+                this.position.x = collisions[0].x - this.width;
+            }
+            else if (this.vel.x < 0) {
+                // this.vel.x = 0;
+                this.position.x = collisions[0].x + collisions[0].width;
+            }
+        }
+    }
+    
+    this.move_y = function () {
+        this.position.y += this.vel.y;
+        var collisions = physics.getCollisions(this, container)
+        if (collisions.length > 0) {
+            if (this.vel.y > 0) {
+                this.vel.y = 0;
+                this.position.y = collisions[0].y - this.height;
+                this.state = new PlayerStandingState(this);
+            }
+            else if (caller.vel.y < 0) {
+                this.vel.y = 0;
+                this.position.y = collisions[0].y + collisions[0].height;
+            }
+        }
+        else {
+            this.state = new PlayerJumpingState(this);
+        }
+    }
 }
 Player.prototype = Object.create(Mob.prototype)
 
@@ -15,8 +49,8 @@ function PlayerBaseState(caller) {
 
     this.update = function () {
         this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
-        physics.move_x(this.caller);
-        physics.move_y(this.caller);
+        this.caller.move_x(this.caller);
+        this.caller.move_y(this.caller);
     }
 }
 

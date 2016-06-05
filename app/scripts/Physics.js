@@ -65,38 +65,5 @@ function Physics() {
         //`hit` will be either `true` or `false`
         return hit;
     };
-    this.move_x = function (caller) {
-        caller.position.x += caller.vel.x;
-        var collisions = physics.getCollisions(caller, container)
-        if (collisions.length > 0) {
-            if (caller.vel.x > 0) {
-                caller.vel.x = 0;
-                caller.position.x = collisions[0].x - caller.width;
-            }
-            else if (caller.vel.x < 0) {
-                caller.vel.x = 0;
-                caller.position.x = collisions[0].x + collisions[0].width;
-            }
-        }
-    }
-    
-    this.move_y = function (caller) {
-        caller.position.y += caller.vel.y;
-        var collisions = physics.getCollisions(caller, container)
-        if (collisions.length > 0) {
-            if (caller.vel.y > 0) {
-                caller.vel.y = 0;
-                caller.position.y = collisions[0].y - caller.height;
-                caller.state = new PlayerStandingState(caller);
-            }
-            else if (caller.vel.y < 0) {
-                caller.vel.y = 0;
-                caller.position.y = collisions[0].y + collisions[0].height;
-            }
-        }
-        else {
-            caller.state = new PlayerJumpingState(caller);
-        }
-    }
 }
 physics = new Physics();

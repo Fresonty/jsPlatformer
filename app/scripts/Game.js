@@ -1,6 +1,6 @@
 
 function Game() {
-    this.state = new PlayState()
+    this.state = new GamePlayState()
 
     this.init = function () {
         this.state.init()
@@ -20,7 +20,7 @@ function GameState() {
     this.update = function () { };
 }
 
-function PlayState() {
+function GamePlayState() {
     GameState.call(this);
     this.init = function () {
         player = new Player("playerimage");
@@ -40,4 +40,4 @@ function PlayState() {
         }
     }
 }
-PlayState.prototype = Object.create(GameState.prototype)
+GamePlayState.prototype = Object.create(GameState.prototype)
