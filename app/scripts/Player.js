@@ -45,17 +45,7 @@ Player.prototype = Object.create(Mob.prototype)
 
 
 function PlayerBaseState(caller) {
-    this.caller = caller
-    this.handleEvents = function () {
-        for (event in eventQueue) {
-            this.handleEvent(eventQueue[event]);
-        }
-    }
-
-    this.update = function () {
-        this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
-        this.caller.move();
-    }
+    MobBaseState.call(this, caller)
 }
 
 function PlayerStandingState(caller) {
