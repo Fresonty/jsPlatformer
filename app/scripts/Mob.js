@@ -28,23 +28,6 @@ function MobBaseState(caller) {
 
     this.update = function () {
         this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
-        physics.move_x();
-        physics.move_y();
+        this.caller.move();
     }
 }
-
-function MobStandingState(caller) {
-    MobBaseState.call(this, caller);
-    this.handleEvent = function() {
-        
-    }
-}
-MobStandingState.prototype = Object.create(MobBaseState.prototype);
-
-function MobJumpingState(caller) {
-    MobBaseState.call(this, caller);
-    this.handleEvent = function() {
-        
-    }
-}
-MobJumpingState.prototype = Object.create(MobBaseState.prototype);

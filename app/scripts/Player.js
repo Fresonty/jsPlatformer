@@ -2,6 +2,11 @@ function Player(texturename) {
     Mob.call(this, texturename);
     this.state = new PlayerJumpingState(this);
     
+    this.move = function() {
+        this.move_x();
+        this.move_y();
+    }
+    
     this.move_x = function () {
         this.position.x += this.vel.x;
         var collisions = physics.getCollisions(this, container)
@@ -49,8 +54,7 @@ function PlayerBaseState(caller) {
 
     this.update = function () {
         this.caller.vel.y = physics.applyGravity(this.caller.vel.y);
-        this.caller.move_x(this.caller);
-        this.caller.move_y(this.caller);
+        this.caller.move();
     }
 }
 
