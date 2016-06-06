@@ -25,7 +25,7 @@ function GamePlayState() {
     this.init = function () {
         player = new Player("playerimage");
         enemy = new Enemy("playerimage");
-        enemy.x = 800;
+        player.x = 800;
         rect1 = new Rectangle(0, 512, 600, 10);
         rect2 = new Rectangle(300, 400, 600, 500);
     }

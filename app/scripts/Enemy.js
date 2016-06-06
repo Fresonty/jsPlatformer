@@ -10,7 +10,7 @@ function Enemy(texturename) {
     this.ai = new AgressiveAi(this, player);
     
     this._update = function() {
-        this.ai.moveToTarget(this, player);
+        this.ai.update();
     }
     
     this.move_x = function () {
@@ -23,6 +23,7 @@ function Enemy(texturename) {
             else if (this.vel.x < 0) {
                 this.position.x = collisions[0].x + collisions[0].width;
             }
+            this.jump();
         }
     }
     
@@ -44,6 +45,11 @@ function Enemy(texturename) {
             this.state = new EnemyJumpingState(this);
         }
     }
+    
+    this.jump = function() {
+        this.vel.y = - 12;
+        this.state = new PlayerJumpingState(this);
+    } 
 }
 Enemy.prototype = Object.create(Mob.prototype)
 
@@ -54,6 +60,19 @@ EnemyBaseState.prototype = Object.create(MobBaseState.prototype)
 
 function EnemyStandingState(caller) {
     EnemyBaseState.call(this, caller)
+    this.handleEvent = function(event) {
+        switch (event) {
+            case "MOVE_RIGHT":
+                this.caller.vel.x = this.caller.speed;
+                break;
+            case "MOVE_LEFT":
+                this.caller.vel.x = - this.caller.speed;
+                break;
+            case "MOVE_UP":
+                this.caller.vel.y = - 12;
+                this.caller.state = new EnemyJumpingState(this.caller);
+        }
+    }
 }
 EnemyStandingState.prototype = Object.create(EnemyBaseState.prototype)
 
@@ -65,28 +84,34 @@ EnemyJumpingState.prototype = Object.create(EnemyBaseState.prototype)
 
 function Ai(caller) {
     this.caller = caller;
+    this.update = function() {
+        null;
+    }
 }
 
 function AgressiveAi(caller, target) {
     Ai.call(this, caller);
     this.target = target;
     
-    this.maxTargetDist = 500;
+    this.maxTargetDist = 1000;
+    this.holdDist = 300;
+    
+    this.update = function() {
+        this.moveToTarget();
+    }
     
     this.moveToTarget = function() {
-        if (Math.abs(this.caller.position.x - this.target.position.x) < this.maxTargetDist || Math.abs(this.caller.position.y - this.target.position.y) < this.maxTargetDist) {
-            if (this.caller.position.x - this.target.position.x < 0) {
-                this.caller.vel.x = this.caller.speed;
+        if (Math.abs(this.caller.position.x - this.target.position.x) < this.maxTargetDist && Math.abs(this.caller.position.y - this.target.position.y) < this.maxTargetDist) {
+            if (this.caller.position.x - this.target.position.x < - this.holdDist) {
+                this.caller.ownEventQueue.push("MOVE_RIGHT");
             }
-            else  {
-                this.caller.vel.x = - this.caller.speed;
-            }
-            /*if (this.caller.position.y - this.target.position.y < 0) {
-                this.caller.vel.y = this.caller.speed;
+            else if (this.caller.position.x - this.target.position.x > this.holdDist) {
+                this.caller.ownEventQueue.push("MOVE_LEFT");
             }
             else {
-                this.caller.vel.y = - this.caller.speed;
-            }*/
+                this.caller.vel.x = 0;
+
+            }
         }
     }
 }

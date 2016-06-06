@@ -6,6 +6,7 @@ function Mob(texturename) {
     this.scale.set(4, 4);
     
     this.state = null;
+    this.ownEventQueue = [];
     
     this.vel = {
         x: 0,
@@ -16,7 +17,9 @@ function Mob(texturename) {
     this.update = function () {
         this._update();
         this.state.handleEvents(this);
+        
         this.state.update(this);
+        this.ownEventQueue = [];
     }
     this._update = function() {
         // reserved for child class
@@ -38,7 +41,11 @@ function MobBaseState(caller) {
         for (event in eventQueue) {
             this.handleEvent(eventQueue[event]);
         }
+        for (event in this.caller.ownEventQueue) {
+            this.handleEvent(this.caller.ownEventQueue[event]);
+        }
     }
+    
     this.handleEvent = function() {
         null;
     }

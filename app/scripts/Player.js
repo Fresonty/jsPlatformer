@@ -31,7 +31,7 @@ function Player(texturename) {
                 this.position.y = collisions[0].y - this.height;
                 this.state = new PlayerStandingState(this);
             }
-            else if (caller.vel.y < 0) {
+            else if (this.vel.y < 0) {
                 this.vel.y = 0;
                 this.position.y = collisions[0].y + collisions[0].height;
             }
@@ -40,6 +40,10 @@ function Player(texturename) {
             this.state = new PlayerJumpingState(this);
         }
     }
+    this.jump = function() {
+        this.vel.y = - 12;
+        this.state = new PlayerJumpingState(this);
+    } 
 }
 Player.prototype = Object.create(Mob.prototype)
 
@@ -54,8 +58,7 @@ function PlayerStandingState(caller) {
         switch (event.keyCode) {
             case PLAYER_MOVE_UP:
                 if (event.type === "keydown") {
-                    this.caller.vel.y = -12;
-                    this.caller.state =  new PlayerJumpingState(this.caller);
+                    this.caller.jump();
                 }
                 else if (event.type === "keyup") {
                     null;
