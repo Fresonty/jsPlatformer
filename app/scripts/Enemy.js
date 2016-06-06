@@ -23,7 +23,6 @@ function Enemy(texturename) {
             else if (this.vel.x < 0) {
                 this.position.x = collisions[0].x + collisions[0].width;
             }
-            this.jump();
         }
     }
     
@@ -98,6 +97,32 @@ function AgressiveAi(caller, target) {
     
     this.update = function() {
         this.moveToTarget();
+        this.findPath();
+    }
+    this.findPath = function() {
+        for (event in this.caller.ownEventQueue) {
+            switch (this.caller.ownEventQueue[event]) {
+                case "MOVE_RIGHT":
+                    this.caller.position.x += this.caller.vel.x;
+                    var collisions = physics.getCollisions(this.caller, container)
+                    this.caller.position.x -= this.caller.vel.x;
+                    if (collisions.length > 0) {
+                        this.caller.ownEventQueue.push("MOVE_UP");
+                    }
+                    break;
+                case "MOVE_LEFT":
+                    this.caller.position.x -= this.caller.vel.x;
+                    var collisions = physics.getCollisions(this.caller, container)
+                    this.caller.position.x += this.caller.vel.x;
+                    if (collisions.length > 0) {
+                        this.caller.ownEventQueue.push("MOVE_UP");
+                    }
+                    break;
+                case "MOVE_UP":
+                    this.caller.vel.y = - 12;
+                    this.caller.state = new EnemyJumpingState(this.caller);
+            }
+        }
     }
     
     this.moveToTarget = function() {
@@ -110,7 +135,6 @@ function AgressiveAi(caller, target) {
             }
             else {
                 this.caller.vel.x = 0;
-
             }
         }
     }

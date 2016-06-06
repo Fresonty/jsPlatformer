@@ -16,8 +16,8 @@ function Mob(texturename) {
     
     this.update = function () {
         this._update();
-        this.state.handleEvents(this);
         
+        this.state.handleEvents(this);
         this.state.update(this);
         this.ownEventQueue = [];
     }
