@@ -19,7 +19,7 @@ function Mob(texturename) {
     
     this.move = function() {
         null;
-    }
+    }  
 }
 Mob.prototype = Object.create(PIXI.Sprite.prototype)
 
