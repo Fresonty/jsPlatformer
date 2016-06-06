@@ -11,10 +11,15 @@ function Mob(texturename) {
         x: 0,
         y: 0,
     }
+    this.speed = 4;
     
     this.update = function () {
+        this._update();
         this.state.handleEvents(this);
         this.state.update(this);
+    }
+    this._update = function() {
+        // reserved for child class
     }
     
     this.move = function() {

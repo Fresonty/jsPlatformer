@@ -68,7 +68,7 @@ function PlayerStandingState(caller) {
 
             case PLAYER_MOVE_LEFT:
                 if (event.type === "keydown") {
-                    this.caller.vel.x = - 4;
+                    this.caller.vel.x = - this.caller.speed;
                 }
                 else if (event.type === "keyup" && this.caller.vel.x < 0) {
                     this.caller.vel.x = 0;
@@ -77,7 +77,7 @@ function PlayerStandingState(caller) {
 
             case PLAYER_MOVE_RIGHT:
                 if (event.type === "keydown") {
-                    this.caller.vel.x = 4;
+                    this.caller.vel.x = this.caller.speed;
                 }
                 else if (event.type === "keyup" && this.caller.vel.x > 0) {
                     this.caller.vel.x = 0;
@@ -107,7 +107,7 @@ function PlayerJumpingState(caller) {
 
             case PLAYER_MOVE_LEFT:
                 if (event.type === "keydown") {
-                    this.caller.vel.x = - 4;
+                    this.caller.vel.x = - this.caller.speed;
                 }
                 else if (event.type === "keyup" && this.caller.vel.x < 0) {
                     this.caller.vel.x = 0;
@@ -116,7 +116,7 @@ function PlayerJumpingState(caller) {
 
             case PLAYER_MOVE_RIGHT:
                 if (event.type === "keydown") {
-                    this.caller.vel.x = 4;
+                    this.caller.vel.x = this.caller.speed;
                 }
                 else if (event.type === "keyup" && this.caller.vel.x > 0) {
                     this.caller.vel.x = 0;
