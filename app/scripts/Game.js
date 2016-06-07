@@ -37,7 +37,20 @@ function GamePlayState() {
 
     this.update = function () {
         for (sprite in container.children) {
-            container.children[sprite].update();
+            try {
+                container.children[sprite].makeEvents();
+            }
+            catch (err) {
+                null;
+            }
+        }
+        for (sprite in container.children) {
+            try {
+                container.children[sprite].handleEvents();
+            }
+            catch (err) {
+                null;
+            }
         }
     }
 }

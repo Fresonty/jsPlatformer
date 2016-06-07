@@ -9,8 +9,8 @@ function Enemy(texturename) {
     
     this.ai = new AgressiveAi(this, player);
     
-    this._update = function() {
-        this.ai.update();
+    this._makeEvents = function() {
+        this.ai.makeEvents();
     }
     
     this.move_x = function () {
@@ -94,7 +94,7 @@ EnemyJumpingState.prototype = Object.create(EnemyBaseState.prototype)
 
 function Ai(caller) {
     this.caller = caller;
-    this.update = function() {
+    this.makeEvents = function() {
         null;
     }
 }
@@ -106,11 +106,12 @@ function AgressiveAi(caller, target) {
     this.maxTargetDist = 1000;
     this.holdDist = 100;
     
-    this.update = function() {
+    this.makeEvents = function() {
         this.moveToTarget();
         this.findPath();
         this.act();
     }
+    
     this.findPath = function() {
         for (event in this.caller.ownEventQueue) {
             switch (this.caller.ownEventQueue[event]) {

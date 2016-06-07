@@ -4,6 +4,7 @@ function Mob(texturename) {
     PIXI.Sprite.call(this, this.texture);
     container.addChild(this);
     this.scale.set(4, 4);
+    this.anchor.set(0.5, 0.5);
     
     this.state = null;
     this.ownEventQueue = [];
@@ -14,14 +15,21 @@ function Mob(texturename) {
     }
     this.speed = 4;
     
-    this.update = function () {
-        this._update();
-        
+    this.makeEvents = function () {
+        this._makeEvents();
+    }
+    this._makeEvents = function() {
+        // reserved for child class
+    }
+    
+    this.handleEvents = function() {
+        this._handleEvents();
         this.state.handleEvents(this);
+        
         this.state.update(this);
         this.ownEventQueue = [];
     }
-    this._update = function() {
+    this._handleEvents = function() {
         // reserved for child class
     }
     
