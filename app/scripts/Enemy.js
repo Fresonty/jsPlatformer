@@ -70,6 +70,17 @@ function EnemyStandingState(caller) {
             case "MOVE_UP":
                 this.caller.vel.y = - 12;
                 this.caller.state = new EnemyJumpingState(this.caller);
+                break;
+        }
+        switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) < 200 &&  Math.abs(event.position.y - this.caller.y) < 200) {
+                    console.log("Valid attack")
+                    if (event.sender !== this.caller) {
+                        this.caller.position.y = 10000;
+                    }
+                }
+            break;
         }
     }
 }
@@ -93,11 +104,12 @@ function AgressiveAi(caller, target) {
     this.target = target;
     
     this.maxTargetDist = 1000;
-    this.holdDist = 300;
+    this.holdDist = 100;
     
     this.update = function() {
         this.moveToTarget();
         this.findPath();
+        this.act();
     }
     this.findPath = function() {
         for (event in this.caller.ownEventQueue) {
@@ -136,6 +148,12 @@ function AgressiveAi(caller, target) {
             else {
                 this.caller.vel.x = 0;
             }
+        }
+    }
+    
+    this.act = function() {
+        if (Math.abs(this.caller.position.x - this.target.position.x) < this.holdDist && Math.abs(this.caller.position.y - this.target.position.y) < this.holdDist) {
+            addEvent(new MobEvent(this.caller, "ATTACK", this.caller.position.x, this.caller.position.y));
         }
     }
 }

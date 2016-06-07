@@ -37,3 +37,12 @@ Right.press = function () {
 Right.release = function () {
     addEvent(event);
 }
+
+function MobEvent(sender, type, x, y) {
+    this.sender = sender;
+    this.type = type;
+    this.position = {
+        x: x,
+        y: y,
+    }
+}

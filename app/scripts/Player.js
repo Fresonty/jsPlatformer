@@ -126,6 +126,16 @@ function PlayerJumpingState(caller) {
                 }
                 break;
         }
+        switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) < 200 &&  Math.abs(event.position.y - this.caller.y) < 200) {
+                    console.log("Valid attack")
+                    if (event.sender !== this.caller) {
+                        this.caller.position.y = 10000;
+                    }
+                }
+            break;
+        }
     }
 }
 PlayerJumpingState.prototype = Object.create(PlayerBaseState.prototype);
