@@ -5,7 +5,6 @@ function Mob(texturename) {
     container.addChild(this);
     this.scale.set(4, 4);
     this.anchor.set(0.5, 0.5);
-    
     this.state = null;
     this.ownEventQueue = [];
     

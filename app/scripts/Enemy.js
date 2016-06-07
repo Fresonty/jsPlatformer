@@ -18,10 +18,10 @@ function Enemy(texturename) {
         var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
             if (this.vel.x > 0) {
-                this.position.x = collisions[0].x - this.width;
+                this.position.x = collisions[0].x - this.width / 2;
             }
             else if (this.vel.x < 0) {
-                this.position.x = collisions[0].x + collisions[0].width;
+                this.position.x = collisions[0].x + collisions[0].x + this.width / 2;;
             }
         }
     }
@@ -32,12 +32,12 @@ function Enemy(texturename) {
         if (collisions.length > 0) {
             if (this.vel.y > 0) {
                 this.vel.y = 0;
-                this.position.y = collisions[0].y - this.height;
+                this.position.y = collisions[0].y - this.height / 2;
                 this.state = new EnemyStandingState(this);
             }
             else if (this.vel.y < 0) {
                 this.vel.y = 0;
-                this.position.y = collisions[0].y + collisions[0].height;
+                this.position.y = collisions[0].y + collisions[0].height + this.height / 2;
             }
         }
         else {
@@ -104,7 +104,7 @@ function AgressiveAi(caller, target) {
     this.target = target;
     
     this.maxTargetDist = 1000;
-    this.holdDist = 100;
+    this.holdDist = 200;
     
     this.makeEvents = function() {
         this.moveToTarget();
@@ -153,7 +153,7 @@ function AgressiveAi(caller, target) {
     }
     
     this.act = function() {
-        if (Math.abs(this.caller.position.x - this.target.position.x) < this.holdDist && Math.abs(this.caller.position.y - this.target.position.y) < this.holdDist) {
+        if (Math.abs(this.caller.position.x - this.target.position.x) <= this.holdDist && Math.abs(this.caller.position.y - this.target.position.y) <= this.holdDist) {
             addEvent(new MobEvent(this.caller, "ATTACK", this.caller.position.x, this.caller.position.y));
         }
     }

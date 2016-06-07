@@ -1,19 +1,19 @@
 function Player(texturename) {
     Mob.call(this, texturename);
     this.state = new PlayerJumpingState(this);
-    
-    this.move = function() {
+
+    this.move = function () {
         this.move_x();
         this.move_y();
     }
-    
+
     this.move_x = function () {
         this.position.x += this.vel.x;
         var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
             if (this.vel.x > 0) {
                 // this.vel.x = 0;
-                this.position.x = collisions[0].x - this.width;
+                this.position.x = collisions[0].x - this.width / 2;
             }
             else if (this.vel.x < 0) {
                 // this.vel.x = 0;
@@ -21,14 +21,14 @@ function Player(texturename) {
             }
         }
     }
-    
+
     this.move_y = function () {
         this.position.y += this.vel.y;
         var collisions = physics.getCollisions(this, container)
         if (collisions.length > 0) {
             if (this.vel.y > 0) {
                 this.vel.y = 0;
-                this.position.y = collisions[0].y - this.height;
+                this.position.y = collisions[0].y - this.height / 2;
                 this.state = new PlayerStandingState(this);
             }
             else if (this.vel.y < 0) {
@@ -40,10 +40,10 @@ function Player(texturename) {
             this.state = new PlayerJumpingState(this);
         }
     }
-    this.jump = function() {
+    this.jump = function () {
         this.vel.y = - 12;
         this.state = new PlayerJumpingState(this);
-    } 
+    }
 }
 Player.prototype = Object.create(Mob.prototype)
 
@@ -84,6 +84,16 @@ function PlayerStandingState(caller) {
                 }
                 else if (event.type === "keyup" && this.caller.vel.x > 0) {
                     this.caller.vel.x = 0;
+                }
+                break;
+        }
+        switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) <= 200 && Math.abs(event.position.y - this.caller.y) <= 200) {
+                    console.log("Valid attack")
+                    if (event.sender !== this.caller) {
+                        this.caller.position.y = 10000;
+                    }
                 }
                 break;
         }
@@ -128,13 +138,13 @@ function PlayerJumpingState(caller) {
         }
         switch (event.type) {
             case "ATTACK":
-                if (Math.abs(event.position.x - this.caller.x) < 200 &&  Math.abs(event.position.y - this.caller.y) < 200) {
+                if (Math.abs(event.position.x - this.caller.x) <= 200 && Math.abs(event.position.y - this.caller.y) <= 200) {
                     console.log("Valid attack")
                     if (event.sender !== this.caller) {
                         this.caller.position.y = 10000;
                     }
                 }
-            break;
+                break;
         }
     }
 }

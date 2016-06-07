@@ -7,8 +7,5 @@ function Rectangle(x, y, width, height) {
     this.x = x;
     this.y = y;
     container.addChild(this);
-    this.update = function() {
-        null;
-    }
 }
 Rectangle.prototype = Object.create(PIXI.Graphics.prototype)
