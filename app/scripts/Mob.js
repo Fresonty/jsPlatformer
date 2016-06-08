@@ -15,21 +15,15 @@ function Mob(texturename) {
     this.speed = 4;
     
     this.makeEvents = function () {
-        this._makeEvents();
-    }
-    this._makeEvents = function() {
-        // reserved for child class
+        null;
     }
     
     this.handleEvents = function() {
-        this._handleEvents();
+        this.vel.x = 0;
         this.state.handleEvents(this);
         
         this.state.update(this);
         this.ownEventQueue = [];
-    }
-    this._handleEvents = function() {
-        // reserved for child class
     }
     
     this.move = function() {

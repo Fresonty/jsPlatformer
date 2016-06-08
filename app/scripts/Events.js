@@ -9,40 +9,21 @@ function clearEventQueue() {
     eventQueue = [];
 }
 
-var Up = keyboard(PLAYER_MOVE_UP);
-Up.press = function () {
-    addEvent(event);
-}
-Up.release = function () {
-    addEvent(event);
-}
-var Down = keyboard(PLAYER_MOVE_DOWN);
-Down.press = function () {
-    addEvent(event);
-}
-Down.release = function () {
-    addEvent(event);
-}
-var Left = keyboard(PLAYER_MOVE_LEFT);
-Left.press = function () {
-    addEvent(event);
-}
-Left.release = function () {
-    addEvent(event);
-}
-var Right = keyboard(PLAYER_MOVE_RIGHT);
-Right.press = function () {
-    addEvent(event);
-}
-Right.release = function () {
-    addEvent(event);
+function MobEvent(type) {
+    this.type = type;
+
 }
 
-function MobEvent(sender, type, x, y) {
+function MobMoveEvent(direction) {
+    MobEvent.call(this, "MOVE")
+    this.direction = direction;
+}
+
+function MobAttackEvent(sender) {
+    MobEvent.call(this, "ATTACK")
     this.sender = sender;
-    this.type = type;
     this.position = {
-        x: x,
-        y: y,
+        x: this.sender.position.x,
+        y: this.sender.position.y,
     }
 }
