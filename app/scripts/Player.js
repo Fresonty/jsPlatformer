@@ -1,7 +1,7 @@
 function Player(texturename) {
     Mob.call(this, texturename);
-    this.state = new MobJumpingState(this);
-
+    
+    // Necessary for inputhandler
     this.Up = keyboard(PLAYER_MOVE_UP);
     this.Up.action = new MobMoveEvent("UP")
     this.Down = keyboard(PLAYER_MOVE_DOWN);
@@ -11,17 +11,25 @@ function Player(texturename) {
     this.Right = keyboard(PLAYER_MOVE_RIGHT);
     this.Right.action = new MobMoveEvent("RIGHT")
 
-    this.inputhandler = new Inputhandler(this, [this.Up, this.Down, this.Left, this.Right])
+    // Components
+    this.state = new JumpingStateComponent(this);
+    this.physics = new PhysicsComponent(this);
+    this.inputhandler = new InputhandlerComponent(this, [this.Up, this.Down, this.Left, this.Right])
     
-    this._makeEvents = this.makeEvents;
+    // Make Events
     this.makeEvents = function () {
+        // Make sure Own Event Queue is empty
+        this.ownEventQueue = [];
         this.inputhandler.makeEvents();
-        this._makeEvents();
-        
     }
-    this._handleEvents = this.handleEvents;
-    this.handleEvents = function() {
-        this._handleEvents();
+    
+    // Handle Events, then update
+    this.handleEvents = function () {
+        this.vel.x = 0;
+        this.physics.handleEvents();
+        this.state.handleEvents(this);
+
+        this.physics.update();
     }
 }
 Player.prototype = Object.create(Mob.prototype)

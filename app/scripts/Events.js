@@ -9,6 +9,7 @@ function clearEventQueue() {
     eventQueue = [];
 }
 
+
 function MobEvent(type) {
     this.type = type;
 
