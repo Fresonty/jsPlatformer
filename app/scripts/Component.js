@@ -1,7 +1,15 @@
 function Component(caller) {
     this.caller = caller;
     this.makeEvents = function () { };
-    this.handleEvents = function () { };
+    this.handleEvents = function () {
+        for (event in eventQueue) {
+            this.handleEvent(eventQueue[event]);
+        }
+        for (event in this.caller.ownEventQueue) {
+            this.handleEvent(this.caller.ownEventQueue[event]);
+        }
+    };
+    this.handleEvent = function () { };
     this.update = function () { };
 }
 
@@ -14,17 +22,15 @@ function PhysicsComponent(caller) {
         this.move();
     }
 
-    this.handleEvents = function () {
-        for (event in eventQueue) {
-            switch (eventQueue[event].type) {
-                case "ATTACK":
-                    if (Math.abs(eventQueue[event].position.x - this.caller.x) < 300 && Math.abs(eventQueue[event].position.y - this.caller.y) < 300) {
-                        if (eventQueue[event].sender !== this.caller) {
-                            console.log("got attacked")
-                        }
+    this.handleEvent = function (event) {
+        switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
+                    if (event.sender !== this.caller) {
+                        console.log("got attacked")
                     }
-                    break;
-            }
+                }
+                break;
         }
     }
 
@@ -59,15 +65,12 @@ function PhysicsComponent(caller) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y - this.caller.height / 2;
-                this.caller.state = new StandingStateComponent(this.caller);
+                this.caller.components.state = new StandingStateComponent(this.caller);
             }
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y + collisions[0].height;
             }
-        }
-        else {
-            this.caller.state = new JumpingStateComponent(this.caller);
         }
     }
 
@@ -135,12 +138,8 @@ function InputhandlerComponent(caller, keys) {
 }
 
 // Ai
-function AiComponent(caller) {
+function AiComponent(caller, type) {
     Component.call(this, caller);
-
-    this.makeEvents = function () {
-        null;
-    }
 }
 
 function AgressiveAiComponent(caller, target) {
@@ -205,19 +204,6 @@ function AgressiveAiComponent(caller, target) {
 // State
 function StateComponent(caller) {
     Component.call(this, caller)
-
-    this.handleEvents = function () {
-        for (event in eventQueue) {
-            this.handleEvent(eventQueue[event]);
-        }
-        for (event in this.caller.ownEventQueue) {
-            this.handleEvent(this.caller.ownEventQueue[event]);
-        }
-    }
-
-    this.handleEvent = function () {
-        null;
-    }
 }
 
 function StandingStateComponent(caller) {
@@ -235,7 +221,7 @@ function StandingStateComponent(caller) {
                         break;
                     case "UP":
                         this.caller.vel.y = - 12;
-                        this.caller.state = new JumpingStateComponent(this.caller);
+                        this.caller.components.state = new JumpingStateComponent(this.caller);
                         break;
                 }
                 break;

@@ -16,5 +16,27 @@ function Mob(texturename) {
         x: 0,
         y: 0,
     }
+
+    // Components
+    this.components = [];
+    
+    // Make Events
+    this.makeEvents = function() {
+        // Make sure Own Event Queue is empty
+        this.ownEventQueue = [];
+        for (component in this.components) {
+            this.components[component].makeEvents();
+        }
+    }
+    // Handle Events, then update
+    this.handleEvents = function() {
+        this.vel.x = 0;
+        for (component in this.components) {
+            this.components[component].handleEvents();
+        }
+        for (component in this.components) {
+            this.components[component].update();
+        }
+    }
 }
 Mob.prototype = Object.create(PIXI.Sprite.prototype)
