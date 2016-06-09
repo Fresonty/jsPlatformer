@@ -1,4 +1,5 @@
 function Mob(texturename) {
+    // Do not change this class except for the changeable attributes section at the end of this calss
     // Init Sprite
     this.texturename = texturename;
     this.texture = PIXI.loader.resources[this.texturename].texture;
@@ -11,7 +12,6 @@ function Mob(texturename) {
 
     // Attributes
     this.ownEventQueue = [];
-    this.speed = 4;
     this.vel = {
         x: 0,
         y: 0,
@@ -38,5 +38,8 @@ function Mob(texturename) {
             this.components[component].update();
         }
     }
+
+    // Changeable Attributes
+    this.speed = 4;
 }
 Mob.prototype = Object.create(PIXI.Sprite.prototype)

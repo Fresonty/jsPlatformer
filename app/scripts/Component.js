@@ -163,7 +163,7 @@ function AgressiveAiComponent(caller, target) {
                     switch (this.caller.ownEventQueue[event].direction) {
                         case "RIGHT":
                             this.caller.position.x += this.caller.vel.x;
-                            var collisions = this.caller.physics.getCollisions(container)
+                            var collisions = this.caller.components.physics.getCollisions(container)
                             this.caller.position.x -= this.caller.vel.x;
                             if (collisions.length > 0) {
                                 this.caller.ownEventQueue.push(new MobMoveEvent("UP"));
@@ -171,7 +171,7 @@ function AgressiveAiComponent(caller, target) {
                             break;
                         case "LEFT":
                             this.caller.position.x -= this.caller.vel.x;
-                            var collisions = this.caller.physics.getCollisions(container)
+                            var collisions = this.caller.components.physics.getCollisions(container)
                             this.caller.position.x += this.caller.vel.x;
                             if (collisions.length > 0) {
                                 this.caller.ownEventQueue.push(new MobMoveEvent("UP"));
