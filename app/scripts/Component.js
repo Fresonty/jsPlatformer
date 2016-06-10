@@ -152,7 +152,7 @@ function AgressiveAiComponent(caller, target) {
 
     this.makeEvents = function () {
         this.moveToTarget();
-        this.findPath();
+        // this.findPath();
         this.act();
     }
 
