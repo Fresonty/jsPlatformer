@@ -3,8 +3,8 @@ function Enemy(texturename) {
 
     // Components
     this.components.push(
-        state = new JumpingStateComponent(this),
-        physics = new PhysicsComponent(this),
+        // state = new JumpingStateComponent(this),
+        physics = new StatePhysicsComponent(this),
         ai = new AgressiveAiComponent(this, player)
     );
 }

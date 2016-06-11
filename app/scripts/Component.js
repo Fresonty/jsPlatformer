@@ -65,7 +65,7 @@ function PhysicsComponent(caller) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y - this.caller.height / 2;
-                this.caller.components.state = new StandingStateComponent(this.caller);
+                //this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"))
             }
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
@@ -118,6 +118,66 @@ function PhysicsComponent(caller) {
         return hit;
     };
 }
+
+function StatePhysicsComponent(caller) {
+    PhysicsComponent.call(this, caller);
+    this.state = StandingState;
+
+    this.move_y = function() {
+        this.caller.position.y += this.caller.vel.y;
+        var collisions = this.getCollisions(container)
+        if (collisions.length > 0) {
+            if (this.caller.vel.y > 0) {
+                this.caller.vel.y = 0;
+                this.caller.position.y = collisions[0].y - this.caller.height / 2;
+                this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"))
+                this.state = StandingState;
+            }
+            else if (this.caller.vel.y < 0) {
+                this.caller.vel.y = 0;
+                this.caller.position.y = collisions[0].y + collisions[0].height;
+            }
+        }
+    }
+
+    this.handleEvent = function (event) {
+        this.state(event);
+    }
+
+    function StandingState(event) {
+        switch (event.type) {
+            case "MOVE":
+                switch (event.direction) {
+                    case "RIGHT":
+                        this.caller.vel.x = this.caller.speed;
+                        break;
+                    case "LEFT":
+                        this.caller.vel.x = - this.caller.speed;
+                        break;
+                    case "UP":
+                        this.caller.vel.y = - 12;
+                        this.state = JumpingState;
+                        break;
+                }
+                break;
+        }
+    }
+    function JumpingState(event) {
+        switch (event.type) {
+            case "MOVE":
+                switch (event.direction) {
+                    case "RIGHT":
+                        this.caller.vel.x = this.caller.speed;
+                        break;
+                    case "LEFT":
+                        this.caller.vel.x = - this.caller.speed;
+                        break;
+                }
+                break;
+        }
+    }
+}
+StatePhysicsComponent.prototype = Object.create(PhysicsComponent.prototype);
 
 // Inputhandler
 function InputhandlerComponent(caller, keys) {
@@ -202,6 +262,7 @@ function AgressiveAiComponent(caller, target) {
 }
 
 // State
+/*
 function StateComponent(caller) {
     Component.call(this, caller)
 }
@@ -249,3 +310,4 @@ function JumpingStateComponent(caller) {
     }
 }
 JumpingStateComponent.prototype = Object.create(StateComponent.prototype)
+*/

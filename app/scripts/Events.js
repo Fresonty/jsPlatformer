@@ -27,3 +27,8 @@ function MobAttackEvent(sender) {
         y: this.sender.position.y,
     }
 }
+
+function MobCollisionEvent(direction) {
+    MobEvent.call(this, "COLLISION");
+    this.direction = direction;
+}
