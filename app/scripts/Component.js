@@ -51,9 +51,11 @@ function PhysicsComponent(caller) {
         if (collisions.length > 0) {
             if (this.caller.vel.x > 0) {
                 this.caller.position.x = collisions[0].x - this.caller.width / 2;
+                this.caller.ownEventQueue.push(new MobCollisionEvent("RIGHT"));
             }
             else if (this.caller.vel.x < 0) {
                 this.caller.position.x = collisions[0].x + collisions[0].width;
+                this.caller.ownEventQueue.push(new MobCollisionEvent("LEFT"));
             }
         }
     }
@@ -70,6 +72,7 @@ function PhysicsComponent(caller) {
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y + collisions[0].height;
+                this.caller.ownEventQueue.push(new MobCollisionEvent("UP"));
             }
         }
     }
