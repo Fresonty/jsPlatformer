@@ -29,11 +29,11 @@ function PhysicsComponent(caller) {
     }
 
     this.move = function () {
-        this.move_x();
-        this.move_y();
+        this.moveCollidex();
+        this.moveCollidey();
     }
 
-    this.move_x = function () {
+    this.moveCollidex = function () {
         this.caller.position.x += this.caller.vel.x;
         var collisions = this.getCollisions(container)
         if (collisions.length > 0) {
@@ -48,7 +48,7 @@ function PhysicsComponent(caller) {
         }
     }
 
-    this.move_y = function () {
+    this.moveCollidey = function () {
         this.caller.position.y += this.caller.vel.y;
         var collisions = this.getCollisions(container)
         if (collisions.length > 0) {
@@ -115,19 +115,14 @@ function StatePhysicsComponent(caller) {
     PhysicsComponent.call(this, caller);
     this.state = StandingState;
 
-    this.move_y = function () {
-        this.caller.position.y += this.caller.vel.y;
-        var collisions = this.getCollisions(container)
-        if (collisions.length > 0) {
-            if (this.caller.vel.y > 0) {
-                this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y - this.caller.height;
-                this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
-                this.state = StandingState;
-            }
-            else if (this.caller.vel.y < 0) {
-                this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y + collisions[0].height;
+    this._update = this.update;
+    this.update = function () {
+        this._update();
+        for (event in this.caller.ownEventQueue) {
+            if (this.caller.ownEventQueue[event].type === "COLLISION") {
+                if (this.caller.ownEventQueue[event].direction === "DOWN") {
+                    this.state = StandingState;
+                }
             }
         }
     }
