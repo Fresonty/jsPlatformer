@@ -65,7 +65,7 @@ function PhysicsComponent(caller) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y - this.caller.height / 2;
-                //this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"))
+                this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
             }
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
@@ -130,7 +130,7 @@ function StatePhysicsComponent(caller) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
                 this.caller.position.y = collisions[0].y - this.caller.height / 2;
-                this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"))
+                this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
                 this.state = StandingState;
             }
             else if (this.caller.vel.y < 0) {
