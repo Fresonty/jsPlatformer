@@ -27,7 +27,7 @@ function GamePlayState() {
         enemy = new Enemy("playerimage");
         player.x = 800;
         rect1 = new Rectangle(0, 512, 600, 10);
-        rect2 = new Rectangle(300, 400, 600, 500);
+        rect2 = new Rectangle(500, 500, 600, 100);
     }
     this.run = function () {
         this.update();

@@ -8,7 +8,7 @@ function Mob(texturename) {
     // Setup
     container.addChild(this);
     this.scale.set(4, 4);
-    this.anchor.set(0.5, 0.5);
+    //this.anchor.set(0.5, 0.5);
 
     // Attributes
     this.ownEventQueue = [];
@@ -33,8 +33,6 @@ function Mob(texturename) {
         this.vel.x = 0;
         for (component in this.components) {
             this.components[component].handleEvents();
-        }
-        for (component in this.components) {
             this.components[component].update();
         }
     }

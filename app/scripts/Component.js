@@ -22,18 +22,6 @@ function PhysicsComponent(caller) {
         this.move();
     }
 
-    this.handleEvent = function (event) {
-        switch (event.type) {
-            case "ATTACK":
-                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
-                    if (event.sender !== this.caller) {
-                        console.log("got attacked")
-                    }
-                }
-                break;
-        }
-    }
-
     this.applyGravity = function () {
         if (this.caller.vel.y <= 8) {
             this.caller.vel.y += 0.4;
@@ -50,7 +38,7 @@ function PhysicsComponent(caller) {
         var collisions = this.getCollisions(container)
         if (collisions.length > 0) {
             if (this.caller.vel.x > 0) {
-                this.caller.position.x = collisions[0].x - this.caller.width / 2;
+                this.caller.position.x = collisions[0].x - this.caller.width;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("RIGHT"));
             }
             else if (this.caller.vel.x < 0) {
@@ -66,7 +54,7 @@ function PhysicsComponent(caller) {
         if (collisions.length > 0) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y - this.caller.height / 2;
+                this.caller.position.y = collisions[0].y - this.caller.height;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
             }
             else if (this.caller.vel.y < 0) {
@@ -93,8 +81,9 @@ function PhysicsComponent(caller) {
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
         hit = false;
 
-        r1.centerX = r1.x;
-        r1.centerY = r1.y;
+        r1.centerX = r1.x + r1.width / 2;
+        r1.centerY = r1.y + r1.height / 2;
+
         r2.centerX = r2.x + r2.width / 2;
         r2.centerY = r2.y + r2.height / 2;
 
@@ -126,13 +115,13 @@ function StatePhysicsComponent(caller) {
     PhysicsComponent.call(this, caller);
     this.state = StandingState;
 
-    this.move_y = function() {
+    this.move_y = function () {
         this.caller.position.y += this.caller.vel.y;
         var collisions = this.getCollisions(container)
         if (collisions.length > 0) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y - this.caller.height / 2;
+                this.caller.position.y = collisions[0].y - this.caller.height;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
                 this.state = StandingState;
             }
@@ -149,6 +138,13 @@ function StatePhysicsComponent(caller) {
 
     function StandingState(event) {
         switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
+                    if (event.sender !== this.caller) {
+                        console.log("got attacked")
+                    }
+                }
+                break;
             case "MOVE":
                 switch (event.direction) {
                     case "RIGHT":
@@ -167,6 +163,13 @@ function StatePhysicsComponent(caller) {
     }
     function JumpingState(event) {
         switch (event.type) {
+            case "ATTACK":
+                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
+                    if (event.sender !== this.caller) {
+                        console.log("got attacked")
+                    }
+                }
+                break;
             case "MOVE":
                 switch (event.direction) {
                     case "RIGHT":
