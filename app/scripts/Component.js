@@ -38,11 +38,11 @@ function PhysicsComponent(caller) {
         var collisions = this.getCollisions(container)
         if (collisions.length > 0) {
             if (this.caller.vel.x > 0) {
-                this.caller.position.x = collisions[0].x - this.caller.width;
+                this.caller.position.x = collisions[0].x - collisions[0].width / 2 - this.caller.width / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("RIGHT"));
             }
             else if (this.caller.vel.x < 0) {
-                this.caller.position.x = collisions[0].x + collisions[0].width;
+                this.caller.position.x = collisions[0].x + collisions[0].width / 2 + this.caller.width / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("LEFT"));
             }
         }
@@ -54,12 +54,12 @@ function PhysicsComponent(caller) {
         if (collisions.length > 0) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y - this.caller.height;
+                this.caller.position.y = collisions[0].y - collisions[0].height / 2 - this.caller.height / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
             }
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y + collisions[0].height;
+                this.caller.position.y = collisions[0].y + collisions[0].height / 2 + this.caller.height / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("UP"));
             }
         }
@@ -81,11 +81,11 @@ function PhysicsComponent(caller) {
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
         hit = false;
 
-        r1.centerX = r1.x + r1.width / 2;
-        r1.centerY = r1.y + r1.height / 2;
+        r1.centerX = r1.x;
+        r1.centerY = r1.y;
 
-        r2.centerX = r2.x + r2.width / 2;
-        r2.centerY = r2.y + r2.height / 2;
+        r2.centerX = r2.x;
+        r2.centerY = r2.y;
 
         r1.halfWidth = r1.width / 2;
         r1.halfHeight = r1.height / 2;
@@ -159,7 +159,7 @@ function StatePhysicsComponent(caller) {
     function JumpingState(event) {
         switch (event.type) {
             case "ATTACK":
-                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
+                if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
                     if (event.sender !== this.caller) {
                         //console.log("got attacked")
                     }
@@ -207,8 +207,8 @@ function AgressiveAiComponent(caller, target) {
 
     this.target = target;
 
-    this.maxTargetDist = 600;
-    this.holdDist = 200;
+    this.maxTargetDist = 100;
+    this.holdDist = 50;
 
     this.makeEvents = function () {
         this.moveToTarget();
@@ -266,16 +266,12 @@ function GraphicsComponent(caller) {
     Component.call(this, caller);
 
     this.update = function() {
-        var oldX = this.caller.position.x
         if (this.caller.vel.x < 0 && this.caller.scale.x > 0) {
             this.caller.scale.x *= -1;
-            this.caller.position.x += this.caller.width;
             console.log(this.caller.position.x)
         }
         else if(this.caller.vel.x > 0 && this.caller.scale.x < 0) {
             this.caller.scale.x *= -1;
-            this.caller.position.x -= this.caller.width;
-            this.caller.anchor.set(0, 0)
             console.log(this.caller.position.x)
         }
         //this.caller.position.x = oldX

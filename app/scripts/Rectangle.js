@@ -6,7 +6,7 @@ function Rectangle(x, y, width, height) {
     this.endFill();
     this.x = x;
     this.y = y;
-    //this.pivot.set(width / 2, height / 2);
+    this.pivot.set(width / 2, height / 2);
     container.addChild(this);
 }
 Rectangle.prototype = Object.create(PIXI.Graphics.prototype)
