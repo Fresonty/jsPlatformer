@@ -9,6 +9,7 @@ var init = function () {
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
     PIXI.loader
         .add("playerimage", "./resources/img/player.png")
+        .add("tilesheet", "./resources/img/tilesheet.png")
         .load(setup);
 
     function setup() {

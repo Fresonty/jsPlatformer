@@ -1,6 +1,6 @@
 
 function Game() {
-    this.state = new GamePlayState()
+    this.state = new GamePlayState;
 
     this.init = function () {
         this.state.init()
@@ -29,6 +29,7 @@ function GamePlayState() {
         rect1 = new Rectangle(0, 100, 600, 10);
         rect2 = new Rectangle(500, 500, 600, 100);
     }
+    
     this.run = function () {
         this.update();
         clearEventQueue();
