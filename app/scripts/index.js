@@ -5,6 +5,7 @@ var init = function () {
         { view: document.getElementById("canvas") }
     );
     container = new PIXI.Container();
+    container.scale.set(4, 4)
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
     PIXI.loader
         .add("playerimage", "./resources/img/player.png")

@@ -23,8 +23,8 @@ function PhysicsComponent(caller) {
     }
 
     this.applyGravity = function () {
-        if (this.caller.vel.y <= 8) {
-            this.caller.vel.y += 0.4;
+        if (this.caller.vel.y <= 2) {
+            this.caller.vel.y += 0.1;
         }
     }
 
@@ -136,7 +136,7 @@ function StatePhysicsComponent(caller) {
             case "ATTACK":
                 if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
                     if (event.sender !== this.caller) {
-                        console.log("got attacked")
+                        //console.log("got attacked")
                     }
                 }
                 break;
@@ -149,7 +149,7 @@ function StatePhysicsComponent(caller) {
                         this.caller.vel.x = - this.caller.speed;
                         break;
                     case "UP":
-                        this.caller.vel.y = - 12;
+                        this.caller.vel.y = - 3;
                         this.state = JumpingState;
                         break;
                 }
@@ -161,7 +161,7 @@ function StatePhysicsComponent(caller) {
             case "ATTACK":
                 if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
                     if (event.sender !== this.caller) {
-                        console.log("got attacked")
+                        //console.log("got attacked")
                     }
                 }
                 break;
@@ -178,7 +178,6 @@ function StatePhysicsComponent(caller) {
         }
     }
 }
-StatePhysicsComponent.prototype = Object.create(PhysicsComponent.prototype);
 
 // Inputhandler
 function InputhandlerComponent(caller, keys) {
@@ -259,6 +258,27 @@ function AgressiveAiComponent(caller, target) {
         if (Math.abs(this.caller.position.x - this.target.position.x) <= this.holdDist && Math.abs(this.caller.position.y - this.target.position.y) <= this.holdDist) {
             addEvent(new MobAttackEvent(this.caller));
         }
+    }
+}
+
+// Graphics
+function GraphicsComponent(caller) {
+    Component.call(this, caller);
+
+    this.update = function() {
+        var oldX = this.caller.position.x
+        if (this.caller.vel.x < 0 && this.caller.scale.x > 0) {
+            this.caller.scale.x *= -1;
+            this.caller.position.x += this.caller.width;
+            console.log(this.caller.position.x)
+        }
+        else if(this.caller.vel.x > 0 && this.caller.scale.x < 0) {
+            this.caller.scale.x *= -1;
+            this.caller.position.x -= this.caller.width;
+            this.caller.anchor.set(0, 0)
+            console.log(this.caller.position.x)
+        }
+        //this.caller.position.x = oldX
     }
 }
 

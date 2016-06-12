@@ -15,7 +15,8 @@ function Player(texturename) {
     this.components.push(
         // state = new JumpingStateComponent(this),
         physics = new StatePhysicsComponent(this),
-        inputhandler = new InputhandlerComponent(this, [this.Up, this.Down, this.Left, this.Right])
+        inputhandler = new InputhandlerComponent(this, [this.Up, this.Down, this.Left, this.Right]),
+        graphics = new GraphicsComponent(this)
     );
 }
 Player.prototype = Object.create(Mob.prototype)

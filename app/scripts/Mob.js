@@ -7,7 +7,7 @@ function Mob(texturename) {
 
     // Setup
     container.addChild(this);
-    this.scale.set(4, 4);
+    //this.scale.set(4, 4);
     //this.anchor.set(0.5, 0.5);
 
     // Attributes
@@ -38,6 +38,6 @@ function Mob(texturename) {
     }
 
     // Changeable Attributes
-    this.speed = 4;
+    this.speed = 1;
 }
 Mob.prototype = Object.create(PIXI.Sprite.prototype)
