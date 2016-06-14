@@ -136,7 +136,7 @@ function StatePhysicsComponent(caller) {
             case "ATTACK":
                 if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
                     if (event.sender !== this.caller) {
-                        //console.log("got attacked")
+                        // What to do when attacked
                     }
                 }
                 break;
@@ -161,7 +161,7 @@ function StatePhysicsComponent(caller) {
             case "ATTACK":
                 if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
                     if (event.sender !== this.caller) {
-                        //console.log("got attacked")
+                        // see above, TODO: Combine
                     }
                 }
                 break;
@@ -268,63 +268,9 @@ function GraphicsComponent(caller) {
     this.update = function() {
         if (this.caller.vel.x < 0 && this.caller.scale.x > 0) {
             this.caller.scale.x *= -1;
-            console.log(this.caller.position.x)
         }
         else if(this.caller.vel.x > 0 && this.caller.scale.x < 0) {
             this.caller.scale.x *= -1;
-            console.log(this.caller.position.x)
-        }
-        //this.caller.position.x = oldX
-    }
-}
-
-// State
-/*
-function StateComponent(caller) {
-    Component.call(this, caller)
-}
-
-function StandingStateComponent(caller) {
-    StateComponent.call(this, caller);
-
-    this.handleEvent = function (event) {
-        switch (event.type) {
-            case "MOVE":
-                switch (event.direction) {
-                    case "RIGHT":
-                        this.caller.vel.x = this.caller.speed;
-                        break;
-                    case "LEFT":
-                        this.caller.vel.x = - this.caller.speed;
-                        break;
-                    case "UP":
-                        this.caller.vel.y = - 12;
-                        this.caller.components.state = new JumpingStateComponent(this.caller);
-                        break;
-                }
-                break;
         }
     }
 }
-StandingStateComponent.prototype = Object.create(StateComponent.prototype)
-
-function JumpingStateComponent(caller) {
-    StateComponent.call(this, caller);
-
-    this.handleEvent = function (event) {
-        switch (event.type) {
-            case "MOVE":
-                switch (event.direction) {
-                    case "RIGHT":
-                        this.caller.vel.x = this.caller.speed;
-                        break;
-                    case "LEFT":
-                        this.caller.vel.x = - this.caller.speed;
-                        break;
-                }
-                break;
-        }
-    }
-}
-JumpingStateComponent.prototype = Object.create(StateComponent.prototype)
-*/

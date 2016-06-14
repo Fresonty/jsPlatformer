@@ -1,3 +1,4 @@
+// GLOBAL event queue
 var eventQueue = [];
 function addEvent(event) {
     eventQueue.push(event)
@@ -10,6 +11,7 @@ function clearEventQueue() {
 }
 
 
+// Events
 function MobEvent(type) {
     this.type = type;
 }
