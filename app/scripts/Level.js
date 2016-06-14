@@ -13,18 +13,17 @@ function Level() {
 }
 
 function Tile(x, y, key) {
-    this.rectangle = new PIXI.Rectangle(TileKeys[key][0][0], TileKeys[key][0][1], TILESIZE, TILESIZE);
-    this.texture = PIXI.loader.resources["tilesheet"].texture;
-    this.texture.frame = this.rectangle;
+    this.texture = PIXI.loader.resources["./resources/img/tilesheet.json"].textures[TileKeys[key]];
     PIXI.Sprite.call(this, this.texture);
+    container.addChild(this)
     this.position.x = x;
     this.position.y = y;
-    container.addChild(this);
+    
 }
 Tile.prototype = Object.create(PIXI.Sprite.prototype)
 
 TileKeys = {
-    "W": [[0, 0], "Wood"],
-    "G": [[TILESIZE, 0], "Grass"],
-    "S": [[0, TILESIZE], "Stone"]
+    "W": "Wood.png",
+    "G": "Grass.png",
+    "S": "Stone.png"
 }
