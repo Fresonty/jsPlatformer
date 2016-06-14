@@ -32,7 +32,7 @@ function GamePlayState() {
         // rect1 = new Rectangle(0, 100, 600, 10);
         // rect2 = new Rectangle(500, 500, 600, 100);
     }
-    
+
     this.run = function () {
         this.update();
         clearEventQueue();
@@ -40,21 +40,11 @@ function GamePlayState() {
     }
 
     this.update = function () {
-        for (sprite in container.children) {
-            try {
-                container.children[sprite].makeEvents();
-            }
-            catch (err) {
-                null;
-            }
+        for (sprite in updateObjects) {
+            updateObjects[sprite].makeEvents();
         }
-        for (sprite in container.children) {
-            try {
-                container.children[sprite].handleEvents();
-            }
-            catch (err) {
-                null;
-            }
+        for (sprite in updateObjects) {
+            updateObjects[sprite].handleEvents();
         }
     }
 }

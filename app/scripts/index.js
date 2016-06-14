@@ -6,6 +6,7 @@ var init = function () {
     );
     container = new PIXI.Container();
     container.scale.set(4, 4)
+    updateObjects = [];
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
     PIXI.loader
         .add("playerimage", "./resources/img/player.png")
