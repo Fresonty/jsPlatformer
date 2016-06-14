@@ -1,21 +1,23 @@
 function Level() {
-    this.level1 = [
-        "WWS",
-        "SSW",
-        "SSS",
-        "SSS"
-    ];
+    this.load = function(file) {
+        // Loads all the data from the file
+        this.file = require("./levels/" + file)
+        this.data = JSON.parse(JSON.stringify(this.file))
+        this.tiles = this.data.layers[0].data
+    }
+    
     this.build = function() {
-        for (row in this.level1) {
-            for (char in this.level1[row]) {
-                new Tile(char * TILESIZE + TILESIZE / 2, row * TILESIZE + TILESIZE / 2, this.level1[row][char])
+        // Makes tiles from file
+        for (tile in this.tiles) {
+            if (this.tiles[tile] != 0) {
+                    new Tile(tile % this.data.layers[0].width * TILESIZE + TILESIZE / 2, parseInt(tile / this.data.layers[0].width) * TILESIZE + TILESIZE / 2, this.tiles[tile])
             }
         }
     }
 }
 
 function Tile(x, y, key) {
-    this.texture = PIXI.loader.resources["./resources/img/tilesheet.json"].textures[TileKeys[key]];
+    this.texture = PIXI.loader.resources["./resources/img/tilesheet.json"].textures[TileID[key]];
     PIXI.Sprite.call(this, this.texture);
     this.anchor.set(0.5, 0.5)
     container.addChild(this)
@@ -24,9 +26,3 @@ function Tile(x, y, key) {
     
 }
 Tile.prototype = Object.create(PIXI.Sprite.prototype)
-
-TileKeys = {
-    "W": "Wood.png",
-    "G": "Grass.png",
-    "S": "Stone.png"
-}
