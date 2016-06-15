@@ -35,7 +35,7 @@ function GamePlayState() {
     this.run = function () {
         this.update();
         clearEventQueue();
-        renderer.render(world);
+        renderer.render(stage);
     }
 
     this.update = function () {
