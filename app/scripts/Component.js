@@ -35,7 +35,7 @@ function PhysicsComponent(caller) {
 
     this.moveCollidex = function () {
         this.caller.position.x += this.caller.vel.x;
-        var collisions = this.getCollisions(container)
+        var collisions = this.getCollisions(world)
         if (collisions.length > 0) {
             if (this.caller.vel.x > 0) {
                 this.caller.position.x = collisions[0].x - collisions[0].width / 2 - this.caller.width / 2;
@@ -50,7 +50,7 @@ function PhysicsComponent(caller) {
 
     this.moveCollidey = function () {
         this.caller.position.y += this.caller.vel.y;
-        var collisions = this.getCollisions(container)
+        var collisions = this.getCollisions(world)
         if (collisions.length > 0) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;

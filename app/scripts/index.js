@@ -5,8 +5,8 @@ var init = function () {
         { view: document.getElementById("canvas") }
     );
     // Containers for game objects
-    container = new PIXI.Container();
-    container.scale.set(4, 4)
+    world = new PIXI.Container();
+    world.scale.set(4, 4);
     updateObjects = [];
 
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;

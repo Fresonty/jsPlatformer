@@ -29,12 +29,13 @@ function GamePlayState() {
         player = new Player("playerimage");
         enemy = new Enemy("playerimage");
         player.x = 100;
+        camera = new Camera(player);
     }
 
     this.run = function () {
         this.update();
         clearEventQueue();
-        renderer.render(container);
+        renderer.render(world);
     }
 
     this.update = function () {
@@ -44,6 +45,7 @@ function GamePlayState() {
         for (sprite in updateObjects) {
             updateObjects[sprite].handleEvents();
         }
+        camera.update();
     }
 }
 GamePlayState.prototype = Object.create(GameState.prototype)

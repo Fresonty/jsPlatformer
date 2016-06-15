@@ -21,7 +21,7 @@ function Level() {
 function Tile(x, y, key) {
     this.texture = PIXI.loader.resources["./resources/img/tilesheet.json"].textures[TileID[key]];
     PIXI.Sprite.call(this, this.texture);
-    container.addChild(this)
+    world.addChild(this)
     this.anchor.set(0.5, 0.5)
     
     this.position.x = x;
