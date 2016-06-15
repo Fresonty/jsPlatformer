@@ -24,7 +24,7 @@ function GamePlayState() {
     GameState.call(this);
     this.init = function () {
         level = new Level();
-        level.load("level1.json");
+        level.load("level2.json");
         level.build();
         player = new Player("playerimage");
         enemy = new Enemy("playerimage");

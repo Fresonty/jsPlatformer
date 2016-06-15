@@ -65,12 +65,14 @@ function PhysicsComponent(caller) {
         }
     }
 
-    this.getCollisions = function (spritesGroup = container) {
+    this.getCollisions = function (spritesGroup = world) {
         var collisions = [];
         for (sprite in spritesGroup.children) {
-            if (spritesGroup.children[sprite] !== caller) {
-                if (this.hitTestRectangle(this.caller, spritesGroup.children[sprite])) {
-                    collisions.push(spritesGroup.children[sprite]);
+            if (Math.abs(spritesGroup.children[sprite].position.x - this.caller.position.x) < 100 && Math.abs(spritesGroup.children[sprite].position.y - this.caller.position.y) < 100) {
+                if (spritesGroup.children[sprite] !== caller) {
+                    if (this.hitTestRectangle(this.caller, spritesGroup.children[sprite])) {
+                        collisions.push(spritesGroup.children[sprite]);
+                    }
                 }
             }
         }
@@ -265,11 +267,11 @@ function AgressiveAiComponent(caller, target) {
 function GraphicsComponent(caller) {
     Component.call(this, caller);
 
-    this.update = function() {
+    this.update = function () {
         if (this.caller.vel.x < 0 && this.caller.scale.x > 0) {
             this.caller.scale.x *= -1;
         }
-        else if(this.caller.vel.x > 0 && this.caller.scale.x < 0) {
+        else if (this.caller.vel.x > 0 && this.caller.scale.x < 0) {
             this.caller.scale.x *= -1;
         }
     }
