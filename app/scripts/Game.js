@@ -22,10 +22,10 @@ Game = {
 
     init: function () {
         // Set up containers
-        this.world.scale.set(4, 4);
-        stage.addChild(this.world);
         this.GUI.scale.set(4, 4);
         stage.addChild(this.GUI);
+        this.world.scale.set(4, 4);
+        stage.addChild(this.world);
 
         // Kick off game
         this.state.init();
@@ -80,7 +80,6 @@ function GamePlayState() {
                 case "DIED":
                     if (Game.eventQueue[event].mob instanceof Player) {
                         Game.state = new GamePlayState();
-                        Game.state.exit();
                         Game.state.init();
                         return;
                     }
@@ -88,10 +87,6 @@ function GamePlayState() {
             }
         }
         Camera.update();
-    }
-
-    this.exit = function() {
-        stage.removeChild(stage.children.world);
     }
 }
 GamePlayState.prototype = Object.create(GameState.prototype)
