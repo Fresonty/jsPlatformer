@@ -7,7 +7,7 @@ function Mob(texturename) {
 
     // Setup
     Game.world.addChild(this);
-    updateObjects.push(this);
+    Game.updateObjects.push(this);
     //this.scale.set(4, 4);
     this.anchor.set(0.5, 0.5);
 

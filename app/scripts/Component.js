@@ -126,6 +126,9 @@ function StatePhysicsComponent(caller) {
                     this.state = StandingState;
                 }
             }
+            else {
+                this.state = JumpingState;
+            }
         }
     }
 

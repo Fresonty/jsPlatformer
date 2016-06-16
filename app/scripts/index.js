@@ -6,12 +6,7 @@ var init = function () {
     );
     // Containers for game objects
     stage = new PIXI.Container();
-    // Render Stage, which contains the gameworld + the gui
-    GUI = new PIXI.Container();
-    GUI.scale.set(4, 4);
-    stage.addChild(GUI);
-    
-    updateObjects = [];
+    // Render Stage, which contains all other Containers
 
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
     PIXI.loader

@@ -1,7 +1,13 @@
 
 Game = {
-    // GLOBAL event queue
+    // Game is the object to contain all game relevant things,
+    // state specific things are stored in that state
     eventQueue : [],
+    updateObjects : [],
+
+    state:  new GamePlayState(),
+    // Containers
+    GUI : new PIXI.Container(),
     world : new PIXI.Container(),
 
     addEvent : function(event) {
@@ -13,11 +19,15 @@ Game = {
     clearEventQueue : function() {
         this.eventQueue = [];
     },
-    state: new GamePlayState(1),
 
     init: function () {
-        this.world.scale.set(4, 4)
+        // Set up containers
+        this.world.scale.set(4, 4);
         stage.addChild(this.world);
+        this.GUI.scale.set(4, 4);
+        stage.addChild(this.GUI);
+
+        // Kick off game
         this.state.init();
         this.mainloop();
     },
@@ -36,12 +46,13 @@ function GameState() {
     this.update = function () { };
 }
 
-function GamePlayState(id) {
-    this.id = id;
+function GamePlayState() {
     GameState.call(this);
+
     this.init = function () {
         Game.clearEventQueue();
         Game.world.children = [];
+        Game.updateObjects = [];
 
         this.level = new Level("level2.json");
         this.level.build();
@@ -58,18 +69,18 @@ function GamePlayState(id) {
     }
 
     this.update = function () {
-        for (sprite in updateObjects) {
-            updateObjects[sprite].makeEvents();
+        for (sprite in Game.updateObjects) {
+            Game.updateObjects[sprite].makeEvents();
         }
-        for (sprite in updateObjects) {
-            updateObjects[sprite].handleEvents();
+        for (sprite in Game.updateObjects) {
+            Game.updateObjects[sprite].handleEvents();
         }
         for (event in Game.eventQueue) {
             switch (Game.eventQueue[event].type) {
                 case "DIED":
                     if (Game.eventQueue[event].mob instanceof Player) {
-                        Game.state = new GamePlayState(2);
-                        updateObjects = [];
+                        Game.state = new GamePlayState();
+                        Game.state.exit();
                         Game.state.init();
                         return;
                     }
@@ -77,6 +88,10 @@ function GamePlayState(id) {
             }
         }
         Camera.update();
+    }
+
+    this.exit = function() {
+        stage.removeChild(stage.children.world);
     }
 }
 GamePlayState.prototype = Object.create(GameState.prototype)
