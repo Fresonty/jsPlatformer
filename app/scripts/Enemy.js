@@ -4,7 +4,7 @@ function Enemy(texturename) {
     // Components
     this.components.push(
         physics = new StatePhysicsComponent(this),
-        ai = new AgressiveAiComponent(this, player),
+        ai = new AgressiveAiComponent(this, Game.state.player),
         graphics = new GraphicsComponent(this)
     );
 }

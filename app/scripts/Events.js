@@ -1,16 +1,3 @@
-// GLOBAL event queue
-var eventQueue = [];
-function addEvent(event) {
-    eventQueue.push(event)
-}
-function removeEvent(eventIndex) {
-    eventQueue.splice(evendIndex, 1)
-}
-function clearEventQueue() {
-    eventQueue = [];
-}
-
-
 // Events
 function MobEvent(type) {
     this.type = type;
@@ -33,4 +20,9 @@ function MobAttackEvent(sender) {
 function MobCollisionEvent(direction) {
     MobEvent.call(this, "COLLISION");
     this.direction = direction;
+}
+
+function MobDiedEvent(mob) {
+    MobEvent.call(this, "DIED");
+    this.mob = mob;
 }

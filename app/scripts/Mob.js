@@ -6,7 +6,7 @@ function Mob(texturename) {
     PIXI.Sprite.call(this, this.texture);
 
     // Setup
-    world.addChild(this);
+    Game.world.addChild(this);
     updateObjects.push(this);
     //this.scale.set(4, 4);
     this.anchor.set(0.5, 0.5);

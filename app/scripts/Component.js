@@ -2,8 +2,8 @@ function Component(caller) {
     this.caller = caller;
     this.makeEvents = function () { };
     this.handleEvents = function () {
-        for (event in eventQueue) {
-            this.handleEvent(eventQueue[event]);
+        for (event in Game.eventQueue) {
+            this.handleEvent(Game.eventQueue[event]);
         }
         for (event in this.caller.ownEventQueue) {
             this.handleEvent(this.caller.ownEventQueue[event]);
@@ -35,7 +35,7 @@ function PhysicsComponent(caller) {
 
     this.moveCollidex = function () {
         this.caller.position.x += this.caller.vel.x;
-        var collisions = this.getCollisions(world)
+        var collisions = this.getCollisions(Game.world)
         if (collisions.length > 0) {
             if (this.caller.vel.x > 0) {
                 this.caller.position.x = collisions[0].x - collisions[0].width / 2 - this.caller.width / 2;
@@ -50,7 +50,7 @@ function PhysicsComponent(caller) {
 
     this.moveCollidey = function () {
         this.caller.position.y += this.caller.vel.y;
-        var collisions = this.getCollisions(world)
+        var collisions = this.getCollisions(Game.world)
         if (collisions.length > 0) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
@@ -65,7 +65,7 @@ function PhysicsComponent(caller) {
         }
     }
 
-    this.getCollisions = function (spritesGroup = world) {
+    this.getCollisions = function (spritesGroup = Game.world) {
         var collisions = [];
         for (sprite in spritesGroup.children) {
             if (Math.abs(spritesGroup.children[sprite].position.x - this.caller.position.x) < 100 && Math.abs(spritesGroup.children[sprite].position.y - this.caller.position.y) < 100) {
@@ -138,7 +138,7 @@ function StatePhysicsComponent(caller) {
             case "ATTACK":
                 if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
                     if (event.sender !== this.caller) {
-                        // What to do when attacked
+                        Game.addEvent(new MobDiedEvent(this.caller));
                     }
                 }
                 break;
@@ -164,6 +164,7 @@ function StatePhysicsComponent(caller) {
                 if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
                     if (event.sender !== this.caller) {
                         // see above, TODO: Combine
+                        Game.addEvent(new MobDiedEvent(this.caller));
                     }
                 }
                 break;
@@ -258,7 +259,7 @@ function AgressiveAiComponent(caller, target) {
 
     this.act = function () {
         if (Math.abs(this.caller.position.x - this.target.position.x) <= this.holdDist && Math.abs(this.caller.position.y - this.target.position.y) <= this.holdDist) {
-            addEvent(new MobAttackEvent(this.caller));
+            Game.addEvent(new MobAttackEvent(this.caller));
         }
     }
 }
