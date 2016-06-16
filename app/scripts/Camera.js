@@ -1,9 +1,18 @@
-function Camera(target) {
-    this.target = target;
-    this.viewPort = "canvas";
-    this.maxOffset = 3/4
+Camera = {
+    target : null,
+    viewPort : "canvas",
+    maxOffset : 3/4,
 
-    this.update = function() {
+    setTarget : function(target) {
+        if (this.target === null) {
+            this.target = target;
+        }
+        else {
+            console.log("Target is already set")
+        }
+    },
+
+    update : function() {
         if (this.target.position.x * world.scale.x > - world.position.x + document.getElementById(this.viewPort).width * this.maxOffset) {
             world.position.x = - this.target.position.x * world.scale.x + document.getElementById(this.viewPort).width / 2 + document.getElementById(this.viewPort).width * (1 - this.maxOffset);
         }

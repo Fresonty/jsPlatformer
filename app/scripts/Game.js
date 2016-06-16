@@ -23,13 +23,12 @@ function GameState() {
 function GamePlayState() {
     GameState.call(this);
     this.init = function () {
-        level = new Level();
-        level.load("level2.json");
+        level = new Level("level2.json");
         level.build();
         player = new Player("playerimage");
         enemy = new Enemy("playerimage");
         player.x = 100;
-        camera = new Camera(player);
+        Camera.setTarget(player);
     }
 
     this.run = function () {
@@ -45,7 +44,7 @@ function GamePlayState() {
         for (sprite in updateObjects) {
             updateObjects[sprite].handleEvents();
         }
-        camera.update();
+        Camera.update();
     }
 }
 GamePlayState.prototype = Object.create(GameState.prototype)
