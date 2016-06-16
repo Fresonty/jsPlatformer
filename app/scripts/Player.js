@@ -18,4 +18,4 @@ function Player(texturename) {
         graphics = new GraphicsComponent(this)
     );
 }
-Player.prototype = Object.create(Mob.prototype)
+Player.prototype = Object.create(Mob.prototype);

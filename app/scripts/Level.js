@@ -17,11 +17,12 @@ function Level(file) {
 }
 
 function Tile(x, y, key) {
+    // Set up tile
     this.texture = PIXI.loader.resources["./resources/img/tilesheet.json"].textures[TileID[key]];
     PIXI.Sprite.call(this, this.texture);
-    Game.world.addChild(this)
-    this.anchor.set(0.5, 0.5)
-
+    Game.world.addChild(this);
+    // Set attributes
+    this.anchor.set(0.5, 0.5);
     this.position.x = x;
     this.position.y = y;
 

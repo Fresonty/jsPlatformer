@@ -10,6 +10,7 @@ Game = {
     GUI : new PIXI.Container(),
     world : new PIXI.Container(),
 
+    // Functions for global eventQueue
     addEvent : function(event) {
         this.eventQueue.push(event)
     },
@@ -20,6 +21,7 @@ Game = {
         this.eventQueue = [];
     },
 
+    // Set up Game
     init: function () {
         // Set up containers
         this.GUI.scale.set(4, 4);
@@ -32,6 +34,7 @@ Game = {
         this.mainloop();
     },
 
+    // Main Game loop
     mainloop: function () {
         this.state.run();
         // Must bind 'this'
@@ -39,13 +42,14 @@ Game = {
     },
 }
 
-
+// Parent class for Game states
 function GameState() {
     this.init = function () { };
     this.run = function () { };
     this.update = function () { };
 }
 
+// Play state for game
 function GamePlayState() {
     GameState.call(this);
 
