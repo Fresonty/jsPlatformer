@@ -1,16 +1,17 @@
 
-function Game() {
-    this.state = new GamePlayState;
+Game = {
+    state : new GamePlayState(),
 
-    this.init = function () {
-        this.state.init()
+    init : function () {
+        this.state.init();
         this.mainloop();
-    }
+    },
 
-    this.mainloop = function () {
+    mainloop : function () {
         this.state.run();
-        requestAnimationFrame(this.mainloop)
-    }.bind(this)
+        // Must bind this
+        requestAnimationFrame(this.mainloop.bind(this));
+    },
 }
 
 

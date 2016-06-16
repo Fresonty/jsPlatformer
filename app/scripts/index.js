@@ -23,7 +23,6 @@ var init = function () {
         .load(setup);
 
     function setup() {
-        game = new Game();
-        game.init();
+        Game.init();
     }
 }
