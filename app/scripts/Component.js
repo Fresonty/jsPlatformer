@@ -115,7 +115,7 @@ function PhysicsComponent(caller) {
 
 function StatePhysicsComponent(caller) {
     PhysicsComponent.call(this, caller);
-    this.state = StandingState;
+    this.state = null;
 
     this._update = this.update;
     this.update = function () {
@@ -123,11 +123,11 @@ function StatePhysicsComponent(caller) {
         for (event in this.caller.ownEventQueue) {
             if (this.caller.ownEventQueue[event].type === "COLLISION") {
                 if (this.caller.ownEventQueue[event].direction === "DOWN") {
-                    this.state = StandingState;
+                    this.state = this.States.Standing;
                 }
             }
             else {
-                this.state = JumpingState;
+                this.state = this.States.Jumping;
             }
         }
     }
@@ -135,53 +135,54 @@ function StatePhysicsComponent(caller) {
     this.handleEvent = function (event) {
         this.state(event);
     }
-
-    function StandingState(event) {
-        switch (event.type) {
-            case "ATTACK":
-                if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
-                    if (event.sender !== this.caller) {
-                        Game.addEvent(new MobDiedEvent(this.caller));
+    this.States = {
+        Standing: function (event) {
+            switch (event.type) {
+                case "ATTACK":
+                    if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
+                        if (event.sender !== this.caller) {
+                            Game.addEvent(new MobDiedEvent(this.caller));
+                        }
                     }
-                }
-                break;
-            case "MOVE":
-                switch (event.direction) {
-                    case "RIGHT":
-                        this.caller.vel.x = this.caller.speed;
-                        break;
-                    case "LEFT":
-                        this.caller.vel.x = - this.caller.speed;
-                        break;
-                    case "UP":
-                        this.caller.vel.y = - 3;
-                        this.state = JumpingState;
-                        break;
-                }
-                break;
-        }
-    }
-    function JumpingState(event) {
-        switch (event.type) {
-            case "ATTACK":
-                if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
-                    if (event.sender !== this.caller) {
-                        // see above, TODO: Combine
-                        Game.addEvent(new MobDiedEvent(this.caller));
+                    break;
+                case "MOVE":
+                    switch (event.direction) {
+                        case "RIGHT":
+                            this.caller.vel.x = this.caller.speed;
+                            break;
+                        case "LEFT":
+                            this.caller.vel.x = - this.caller.speed;
+                            break;
+                        case "UP":
+                            this.caller.vel.y = - 3;
+                            this.state = this.States.Jumping;
+                            break;
                     }
-                }
-                break;
-            case "MOVE":
-                switch (event.direction) {
-                    case "RIGHT":
-                        this.caller.vel.x = this.caller.speed;
-                        break;
-                    case "LEFT":
-                        this.caller.vel.x = - this.caller.speed;
-                        break;
-                }
-                break;
-        }
+                    break;
+            }
+        },
+        Jumping: function (event) {
+            switch (event.type) {
+                case "ATTACK":
+                    if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
+                        if (event.sender !== this.caller) {
+                            // see above, TODO: Combine
+                            Game.addEvent(new MobDiedEvent(this.caller));
+                        }
+                    }
+                    break;
+                case "MOVE":
+                    switch (event.direction) {
+                        case "RIGHT":
+                            this.caller.vel.x = this.caller.speed;
+                            break;
+                        case "LEFT":
+                            this.caller.vel.x = - this.caller.speed;
+                            break;
+                    }
+                    break;
+            }
+        },
     }
 }
 

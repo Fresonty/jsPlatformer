@@ -1,10 +1,9 @@
-
 Game = {
     // Game is the object to contain all game relevant things,
     // state specific things are stored in that state
     eventQueue: [],
     updateObjects: [],
-
+    // state is just a reference to the state in Game.States 
     state: null,
     // Containers
     GUI: new PIXI.Container(),
@@ -30,7 +29,7 @@ Game = {
         stage.addChild(this.world);
 
         // Kick off game
-        this.state = GamePlayState;
+        this.state = this.States.Play;
         this.state.init();
         this.mainloop();
     },
@@ -41,46 +40,50 @@ Game = {
         // Must bind 'this'
         requestAnimationFrame(this.mainloop.bind(this));
     },
-}
 
-// Play state for game
-GamePlayState = {
-    init: function () {
-        Game.clearEventQueue();
-        Game.world.children = [];
-        Game.updateObjects = [];
+    // All Game states
+    States: {
+        // Play state for game
+        Play: {
+            init: function () {
+                Game.clearEventQueue();
+                Game.world.children = [];
+                Game.updateObjects = [];
 
-        this.level = new Level("level2.json");
-        this.level.build();
-        this.player = new Player("playerimage");
-        this.enemy = new Enemy("playerimage");
-        this.player.x = 100;
-        Camera.setTarget(this.player);
-    },
+                this.level = new Level("level2.json");
+                this.level.build();
+                this.player = new Player("playerimage");
+                this.enemy = new Enemy("playerimage");
+                this.player.x = 100;
+                Camera.setTarget(this.player);
+            },
 
-    run: function () {
-        this.update();
-        Game.clearEventQueue();
-        renderer.render(stage);
-    },
+            run: function () {
+                this.update();
+                Game.clearEventQueue();
+                renderer.render(stage);
+            },
 
-    update: function () {
-        for (sprite in Game.updateObjects) {
-            Game.updateObjects[sprite].makeEvents();
-        }
-        for (sprite in Game.updateObjects) {
-            Game.updateObjects[sprite].handleEvents();
-        }
-        for (event in Game.eventQueue) {
-            switch (Game.eventQueue[event].type) {
-                case "DIED":
-                    if (Game.eventQueue[event].mob instanceof Player) {
-                        Game.state.init();
-                        return;
+            update: function () {
+                for (sprite in Game.updateObjects) {
+                    Game.updateObjects[sprite].makeEvents();
+                }
+                for (sprite in Game.updateObjects) {
+                    Game.updateObjects[sprite].handleEvents();
+                }
+                for (event in Game.eventQueue) {
+                    switch (Game.eventQueue[event].type) {
+                        case "DIED":
+                            if (Game.eventQueue[event].mob instanceof Player) {
+                                Game.state.init();
+                                return;
+                            }
+                            break;
                     }
-                    break;
+                }
+                Camera.update();
             }
-        }
-        Camera.update();
+        },
     }
 }
+
