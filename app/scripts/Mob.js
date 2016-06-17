@@ -20,9 +20,9 @@ function Mob(texturename) {
 
     // Components
     this.components = [];
-    
+
     // Make Events
-    this.makeEvents = function() {
+    this.makeEvents = function () {
         // Make sure Own Event Queue is empty
         this.ownEventQueue = [];
         for (component in this.components) {
@@ -30,7 +30,7 @@ function Mob(texturename) {
         }
     }
     // Handle Events, then update
-    this.handleEvents = function() {
+    this.handleEvents = function () {
         this.vel.x = 0;
         for (component in this.components) {
             this.components[component].handleEvents();
