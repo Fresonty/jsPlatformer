@@ -29,37 +29,41 @@ function PhysicsComponent(caller) {
     }
 
     this.move = function () {
-        this.moveCollidex();
-        this.moveCollidey();
+        this.moveCollideX();
+        this.moveCollideY();
     }
 
-    this.moveCollidex = function () {
+    this.moveCollideX = function () {
         this.caller.position.x += this.caller.vel.x;
-        var collisions = this.getCollisions(Game.world)
-        if (collisions.length > 0) {
+        var collisions = this.getCollision(Game.world, "x")
+        //if (collisions.length > 0) {
+        if (collisions !== null) {
             if (this.caller.vel.x > 0) {
-                this.caller.position.x = collisions[0].x - collisions[0].width / 2 - this.caller.width / 2;
+                this.caller.vel.x = 0;
+                this.caller.position.x = collisions.x - collisions.width / 2 - this.caller.width / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("RIGHT"));
             }
             else if (this.caller.vel.x < 0) {
-                this.caller.position.x = collisions[0].x + collisions[0].width / 2 + this.caller.width / 2;
+                this.caller.vel.x = 0;
+                this.caller.position.x = collisions.x + collisions.width / 2 + this.caller.width / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("LEFT"));
             }
         }
     }
 
-    this.moveCollidey = function () {
+    this.moveCollideY = function () {
         this.caller.position.y += this.caller.vel.y;
-        var collisions = this.getCollisions(Game.world)
-        if (collisions.length > 0) {
+        var collisions = this.getCollision(Game.world, "y")
+        //if (collisions.length > 0) {
+        if (collisions !== null) {
             if (this.caller.vel.y > 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y - collisions[0].height / 2 - this.caller.height / 2;
+                this.caller.position.y = collisions.y - collisions.height / 2 - this.caller.height / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("DOWN"));
             }
             else if (this.caller.vel.y < 0) {
                 this.caller.vel.y = 0;
-                this.caller.position.y = collisions[0].y + collisions[0].height / 2 + this.caller.height / 2;
+                this.caller.position.y = collisions.y + collisions.height / 2 + this.caller.height / 2;
                 this.caller.ownEventQueue.push(new MobCollisionEvent("UP"));
             }
         }
@@ -68,7 +72,7 @@ function PhysicsComponent(caller) {
     this.getCollisions = function (spritesGroup = Game.world) {
         var collisions = [];
         for (sprite in spritesGroup.children) {
-            if (Math.abs(spritesGroup.children[sprite].position.x - this.caller.position.x) < 100 && Math.abs(spritesGroup.children[sprite].position.y - this.caller.position.y) < 100) {
+            if (Math.abs(spritesGroup.children[sprite].position.x - this.caller.position.x) < 30 && Math.abs(spritesGroup.children[sprite].position.y - this.caller.position.y) < 30) {
                 if (spritesGroup.children[sprite] !== caller) {
                     if (this.hitTestRectangle(this.caller, spritesGroup.children[sprite])) {
                         collisions.push(spritesGroup.children[sprite]);
@@ -79,23 +83,30 @@ function PhysicsComponent(caller) {
         return collisions;
     }
 
+    this.getCollision = function(spritesGroup, axis) {
+        for (sprite in spritesGroup.children) {
+            if (Math.abs(spritesGroup.children[sprite].position[axis] - this.caller.position[axis]) < 30) {
+                if (spritesGroup.children[sprite] !== caller) {
+                    if (this.hitTestRectangle(this.caller, spritesGroup.children[sprite])) {
+                        return spritesGroup.children[sprite];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     this.hitTestRectangle = function (r1, r2) {
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
         hit = false;
-
-        r1.centerX = r1.x;
-        r1.centerY = r1.y;
-
-        r2.centerX = r2.x;
-        r2.centerY = r2.y;
 
         r1.halfWidth = r1.width / 2;
         r1.halfHeight = r1.height / 2;
         r2.halfWidth = r2.width / 2;
         r2.halfHeight = r2.height / 2;
 
-        vx = r1.centerX - r2.centerX;
-        vy = r1.centerY - r2.centerY;
+        vx = r1.x - r2.x;
+        vy = r1.y - r2.y;
 
         combinedHalfWidths = r1.halfWidth + r2.halfWidth;
         combinedHalfHeights = r1.halfHeight + r2.halfHeight;
