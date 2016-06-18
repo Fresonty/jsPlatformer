@@ -34,3 +34,36 @@ function keyboard(keyCode) {
     );
     return key;
 }
+
+var mouseX = null;
+var mouseY = null;
+var mouseClicking = false;
+
+document.addEventListener('mousemove', onMouseUpdate, false);
+document.addEventListener('mouseenter', onMouseUpdate, false);
+document.addEventListener('mousedown', onMouseDown, false);
+document.addEventListener('mouseup', onMouseUp, false);
+
+function onMouseUpdate(e) {
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+}
+
+function getMouseX() {
+    return mouseX;
+}
+
+function getMouseY() {
+    return mouseY;
+}
+
+function onMouseDown() {
+    mouseClicking = true;
+}
+function onMouseUp() {
+    mouseClicking = false;
+}
+
+function getMouseClicking() {
+    return mouseClicking;
+}

@@ -175,7 +175,7 @@ function StatePhysicsComponent(caller) {
         Jumping: function (event) {
             switch (event.type) {
                 case "ATTACK":
-                    if (Math.abs(event.position.x - this.caller.x) < 50 && Math.abs(event.position.y - this.caller.y) < 50) {
+                    if (Math.abs(event.position.x - this.caller.x) < 300 && Math.abs(event.position.y - this.caller.y) < 300) {
                         if (event.sender !== this.caller) {
                             // see above, TODO: Combine
                             Game.addEvent(new MobDiedEvent(this.caller));
@@ -195,6 +195,8 @@ function StatePhysicsComponent(caller) {
             }
         },
     }
+    // Set after States are initialized
+    this.state = this.States.Jumping;
 }
 
 // Inputhandler

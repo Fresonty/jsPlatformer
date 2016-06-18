@@ -1,12 +1,12 @@
 var init = function () {
     renderer = PIXI.autoDetectRenderer(
-        1000,
-        600,
+        1200,
+        800,
         { view: document.getElementById("canvas") }
     );
-    // Containers for game objects
+    // Container for other containers
     stage = new PIXI.Container();
-    // Render Stage, which contains all other Containers
+    // Render stage, which contains all other Containers in it
 
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
     PIXI.loader

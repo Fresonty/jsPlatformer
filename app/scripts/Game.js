@@ -29,7 +29,7 @@ Game = {
         stage.addChild(this.world);
 
         // Kick off game
-        this.state = this.States.Play;
+        this.state = this.States.MainMenu;
         this.state.init();
         this.mainloop();
     },
@@ -47,6 +47,7 @@ Game = {
         Play: {
             init: function () {
                 Game.clearEventQueue();
+                Game.GUI.children = [];
                 Game.world.children = [];
                 Game.updateObjects = [];
 
@@ -84,6 +85,18 @@ Game = {
                 Camera.update();
             }
         },
+
+        MainMenu: {
+            init: function() {
+                this.startButton = new Button(40, 40, 40, 40, 0x66CCFF, function() 
+                {Game.state = Game.States.Play;
+                        Game.state.init();})
+            },
+            run: function() {
+                this.startButton.update();
+                renderer.render(stage);
+            }
+        }
     }
 }
 
