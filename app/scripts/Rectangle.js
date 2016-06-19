@@ -10,9 +10,15 @@ function Rectangle(x, y, width, height, color) {
 }
 Rectangle.prototype = Object.create(PIXI.Graphics.prototype)
 
-function Button(x, y, width, height, color, action) {
+function Button(x, y, width, height, color, dispText, action) {
     Rectangle.call(this, x, y, width, height, color);
     Game.GUI.addChild(this);
+    this.dispText = dispText;
+    this.text = new PIXI.Text(this.dispText,{font : '16px Arial', fill : 0xFFFFFF});
+    this.text.position.x = this.position.x - this.text.width / 2;
+    this.text.position.y = this.position.y - this.text.height / 2;
+    Game.GUI.addChild(this.text);
+
     this.action = action;
     this.checkHover = function () {
         var mouseX = getMouseX();

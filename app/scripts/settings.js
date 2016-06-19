@@ -4,6 +4,8 @@ var PLAYER_MOVE_UP = 38;
 var PLAYER_MOVE_DOWN = 40;
 
 TILESIZE = 8;
+GUISCALE = 2;
+GAMESCALE = 4;
 
 TileID = {
     1: "Grass.png",

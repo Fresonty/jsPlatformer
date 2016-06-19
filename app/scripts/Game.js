@@ -23,9 +23,9 @@ Game = {
     // Set up Game
     init: function () {
         // Set up containers
-        this.GUI.scale.set(4, 4);
+        this.GUI.scale.set(GUISCALE, GUISCALE);
         stage.addChild(this.GUI);
-        this.world.scale.set(4, 4);
+        this.world.scale.set(GAMESCALE, GAMESCALE);
         stage.addChild(this.world);
 
         // Kick off game
@@ -88,7 +88,7 @@ Game = {
 
         MainMenu: {
             init: function() {
-                this.startButton = new Button(40, 40, 40, 40, 0x66CCFF, function() 
+                this.startButton = new Button(400, 100, 200, 100, 0x66CCFF, 'Start Game!',function() 
                 {Game.state = Game.States.Play;
                         Game.state.init();})
             },
