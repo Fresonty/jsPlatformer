@@ -1,4 +1,6 @@
 var init = function () {
+    remote = require('electron').remote;
+    
     renderer = PIXI.autoDetectRenderer(
         1200,
         800,
