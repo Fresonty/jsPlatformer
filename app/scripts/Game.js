@@ -95,13 +95,15 @@ Game = {
         MainMenu: {
             init: function () {
                 Game.States.preInit();
-                this.title = new PIXI.Text("BROJS!",{font : '50px Arial', fill : 0xFF3333});
+
+                this.title = new PIXI.Text("JS Platformer!",{font : '50px Arial', fill : 0xFF3333});
                 this.title.position.x = renderer.width / 2 / GUISCALE - this.title.width / 2;
                 this.title.position.y = 30;
                 Game.GUI.addChild(this.title);
+                
                 // Add buttons
-                this.startButton = new Button(renderer.width / 2 / GUISCALE, renderer.height / 2 / GUISCALE, 200, 100, 0x8F79F9, 'Start Game!', function () {Game.state = Game.States.Play; Game.state.init();});
-                this.exitButton = new Button(renderer.width / 2 / GUISCALE, renderer.height / 4 * 3 / GUISCALE, 200, 100, 0x999999, 'Exit', function () {var window = remote.getCurrentWindow(); window.close();});
+                this.startButton = new Button(renderer.width / 2 / GUISCALE, renderer.height / 2 / GUISCALE, 200, 75, 0x8F79F9, 'Start Game!', function () {Game.state = Game.States.Play; Game.state.init();});
+                this.exitButton = new Button(renderer.width / 2 / GUISCALE, renderer.height / 4 * 3 / GUISCALE, 200, 75, 0x999999, 'Exit', function () {var window = remote.getCurrentWindow(); window.close();});
             },
             run: function () {
                 for (object in Game.guiUpdateObjects) {
